@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/welcome_card_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.CardView
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                android:layout_margin="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:background="@color/colorWhite"
+                        android:weightSum="9"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:id="@+id/main_to_padi"
+                            android:background="?android:selectableItemBackground"
+                            android:padding="8dp"
+                            android:layout_weight="3"
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:padding="16dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/rice"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp" />
+                            <TextView
+                                android:layout_gravity="center"
+                                android:text="PANEN"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/main_to_pupuk"
+                            android:background="?android:selectableItemBackground"
+                            android:padding="8dp"
+                            android:layout_weight="3"
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:padding="13dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/fertilizer"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp" />
+                            <TextView
+                                android:layout_gravity="center"
+                                android:text="PUPUK"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/main_to_bibit"
+                            android:background="?android:selectableItemBackground"
+                            android:padding="8dp"
+                            android:layout_weight="3"
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:padding="16dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/coffee"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp" />
+                            <TextView
+                                android:layout_gravity="center"
+                                android:text="BIBIT"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:background="@color/colorWhite"
+                        android:weightSum="9"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:id="@+id/main_to_ternak"
+                            android:background="?android:selectableItemBackground"
+                            android:padding="8dp"
+                            android:layout_weight="3"
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:padding="16dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/cow"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp" />
+                            <TextView
+                                android:layout_gravity="center"
+                                android:text="TERNAK"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/main_to_profil"
+                            android:background="?android:selectableItemBackground"
+                            android:padding="8dp"
+                            android:layout_weight="3"
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:padding="13dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_action_profile"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp" />
+                            <TextView
+                                android:layout_gravity="center"
+                                android:text="PROFIL"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/main_to_more"
+                            android:background="?android:selectableItemBackground"
+                            android:padding="8dp"
+                            android:layout_weight="3"
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:padding="16dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_action_more"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp" />
+                            <TextView
+                                android:layout_gravity="center"
+                                android:text="MORE"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:id="@+id/foryou"
+            android:layout_below="@id/welcome_card_main"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:text="UNTUK ANDA"
+            android:layout_height="wrap_content" />
+        <RelativeLayout
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:id="@+id/separator_fy"
+            android:layout_below="@id/foryou"
+            android:background="@color/colorGrey"
+            android:layout_width="match_parent"
+            android:layout_height="2dp">
+
+        </RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_below="@id/separator_fy"
+            android:id="@+id/primary_recycler"
+            android:nestedScrollingEnabled="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+
+    </RelativeLayout>
+
+</ScrollView>

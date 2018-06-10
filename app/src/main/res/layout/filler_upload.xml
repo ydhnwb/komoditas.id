@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/relative_top_catatan"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="5"
+                android:hint="Nama barang"
+                android:id="@+id/judul_post"/>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_marginTop="8dp"
+                android:hint="@string/caption"
+                android:layout_below="@id/judul_post"
+                android:id="@+id/caption_post"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Harga"
+                android:inputType="numberDecimal"
+                android:id="@+id/harga_awal"
+                android:layout_marginTop="4dp"
+                android:layout_below="@id/caption_post"/>
+            <LinearLayout
+                android:weightSum="10"
+                android:gravity="center_vertical"
+                android:layout_below="@id/harga_awal"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Spinner
+                    android:id="@+id/tipe_barang"
+                    android:entries="@array/spinner_tipe_barang"
+                    android:layout_weight="5"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent">
+                </Spinner>
+                <Button
+                    android:layout_weight="5"
+                    android:textColor="@color/colorPrimary"
+                    android:id="@+id/add_photos"
+                    android:text="@string/tambah_foto"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/almt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_margin="4dp"
+            android:layout_below="@id/relative_top_catatan"
+            android:id="@+id/relative_bottom_catatan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list_photos_catatan"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/swipe_left_help"
+                android:layout_marginTop="8dp"
+                android:textSize="12sp"
+                android:text="@string/swipe_left_to_delete"
+                android:layout_below="@id/list_photos_catatan"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+</ScrollView>

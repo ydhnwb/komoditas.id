@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:background="?android:attr/selectableItemBackground"
+            android:id="@+id/root_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:background="?android:attr/selectableItemBackground"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:background="@color/colorWhite"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/user_profile_on_list"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:civ_border_width="2dp"
+                        app:civ_border_color="@color/materialBlack"/>
+
+                    <LinearLayout
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/nama_barang_on_list"
+                            android:textSize="17sp"
+                            android:textColor="@color/materialBlack"
+                            android:text=""
+                            android:textStyle="bold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/date_on_list"
+                                android:textSize="12sp"
+                                android:layout_marginTop="4dp"
+                                android:text=""
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:textColor="@color/materialBlack"
+                                android:textStyle="bold"
+                                android:text=" - "
+                                android:layout_marginTop="4dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:textSize="12sp"
+                                android:id="@+id/user_name_on_list"
+                                android:textStyle="bold"
+                                android:layout_marginTop="4dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:maxLines="1"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:text=""/>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:maxLines="1"
+                            android:id="@+id/harga_on_list"
+                            android:textStyle="bold"
+                            android:layout_marginTop="4dp"
+                            android:layout_width="match_parent"
+                            android:text=""
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:maxLines="5"
+                            android:id="@+id/caption_on_list"
+                            android:textSize="15sp"
+                            android:text=""
+                            android:layout_marginTop="8dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/horizontal_rv"
+                            android:layout_marginTop="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                        </android.support.v7.widget.RecyclerView>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <RelativeLayout
+                    android:background="#bdbdbd"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp">
+
+                </RelativeLayout>
+
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>

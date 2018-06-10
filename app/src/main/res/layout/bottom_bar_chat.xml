@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="@color/colorWhite"
+    android:layout_alignParentBottom="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:background="@color/colorWhite"
+        android:gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:background="#bdbdbd"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="1dp">
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:paddingStart="8dp"
+            android:weightSum="10"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+
+                android:id="@+id/text_chat"
+                android:layout_width="0dp"
+                android:layout_weight="8"
+                android:layout_gravity="center"
+                app:met_hideUnderline="true"
+                android:hint="Ketik pesan..."
+                android:maxLines="5"
+                android:layout_height="wrap_content" />
+
+            <RelativeLayout
+                android:clickable="true"
+                android:id="@+id/send_chat"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:src="@drawable/ic_action_send"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+</android.support.constraint.ConstraintLayout>

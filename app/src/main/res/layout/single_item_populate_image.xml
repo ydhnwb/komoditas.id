@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp">
+
+
+    <RelativeLayout
+        android:background="#d32f2f"
+        android:id="@+id/view_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:textColor="#fff"
+            android:text="@string/delete_this_item"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/trash_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <ImageView
+            android:id="@+id/trash_icon"
+            android:layout_marginEnd="8dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_action_clear"
+            android:layout_width="28dp"
+            android:layout_height="28dp" />
+
+        <RelativeLayout
+            android:padding="8dp"
+            android:background="#fff"
+            android:id="@+id/view_foreground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image_list_circle"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:padding="8dp"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:padding="8dp"
+                android:layout_toEndOf="@id/image_list_circle"
+                android:textColor="#000"
+                android:id="@+id/fileName"
+                android:text="Lorem ipsum dolor sit amet"
+                android:layout_width="match_parent"
+                android:maxLines="1"
+                android:layout_height="wrap_content"
+                tools:ignore="RtlSymmetry" />
+            <ImageView
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="8dp"
+                android:id="@+id/status_image_view"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_action_waiting"
+                android:layout_width="18dp"
+                android:layout_height="18dp" />
+
+            <RelativeLayout
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@id/image_list_circle"
+                android:background="#bdbdbd"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                tools:ignore="RtlSymmetry">
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+
+</FrameLayout>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_marginTop="38dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_pic"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/profile_display_name"
+                android:textColor="@color/materialBlack"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center"
+                android:text=""
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:maxLines="1"
+                android:layout_marginTop="4dp"
+                android:text=""
+                android:layout_gravity="center"
+                android:id="@+id/profile_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.CardView
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                android:layout_margin="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:background="@color/colorWhite"
+                    android:weightSum="9"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:id="@+id/profile_go_to_pesan"
+                        android:background="?android:selectableItemBackground"
+                        android:padding="8dp"
+                        android:layout_weight="3"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:padding="16dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_action_message"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp" />
+                        <TextView
+                            android:layout_gravity="center"
+                            android:text="PESAN"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/profile_go_to_transaksi"
+                        android:background="?android:selectableItemBackground"
+                        android:padding="8dp"
+                        android:layout_weight="3"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:padding="13dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_action_transaksi"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp" />
+                        <TextView
+                            android:layout_gravity="center"
+                            android:text="TRANSAKSI"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/profile_go_to_pengaturan"
+                        android:background="?android:selectableItemBackground"
+                        android:padding="8dp"
+                        android:layout_weight="3"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:padding="16dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_action_settings"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp" />
+                        <TextView
+                            android:layout_gravity="center"
+                            android:text="PENGATURAN"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:textStyle="bold"
+                android:text="BARANG ANDA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <RelativeLayout
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:background="@color/colorGrey"
+                android:layout_width="match_parent"
+                android:layout_height="2dp">
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:layout_margin="16dp"
+                android:id="@+id/profile_recycle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+</ScrollView>

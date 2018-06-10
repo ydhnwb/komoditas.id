@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#f1f1f1"
+    android:layout_alignParentBottom="true"
+    android:layout_height="56dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:background="#e0e0e0"
+            android:layout_width="match_parent"
+            android:layout_height="1dp">
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:weightSum="10"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:layout_weight="5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:textColor="@color/colorPrimary"
+                    android:elevation="2dp"
+                    android:id="@+id/kirimpesan"
+                    android:text="KIRIM PESAN"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:layout_weight="5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:elevation="2dp"
+                    android:textColor="#18c735"
+                    android:text="BELI"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:id="@+id/beli"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>
