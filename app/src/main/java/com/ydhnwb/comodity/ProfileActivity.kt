@@ -3,10 +3,9 @@ package com.ydhnwb.comodity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.SimpleItemAnimator
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -16,9 +15,6 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.ydhnwb.comodity.Adapter.HorizontalRVAdapter
-import com.ydhnwb.comodity.FirebaseMethods.AnotherMethods
-import com.ydhnwb.comodity.Interfaces.MyClickListener
 import com.ydhnwb.comodity.Model.ImageModel
 import com.ydhnwb.comodity.Model.IndividualPostModel
 import com.ydhnwb.comodity.Model.PostModel
@@ -34,20 +30,22 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var mAuthStateListeer : FirebaseAuth.AuthStateListener
     private lateinit var me : UserModel
     private lateinit var firebaseRecyclerAdapter: FirebaseRecyclerAdapter<IndividualPostModel,SingleListMainViewHolder>
-    var sDatabaseReference : DatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.INDIVIDUAL_POST)
-    companion object {
-        private var acceptableToLoad : Boolean = false
-    }
+    private var sDatabaseReference : DatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.INDIVIDUAL_POST)
+    private lateinit var listOfPhotos : MutableList<ImageModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+        listOfPhotos = ArrayList()
+        initAuth()
+        val animator = profile_recycle.itemAnimator
+        if (animator is SimpleItemAnimator) {
+            animator.supportsChangeAnimations = false
+        }
         val mLayoutManager = LinearLayoutManager(applicationContext)
         mLayoutManager.stackFromEnd = true
         mLayoutManager.reverseLayout = true
         profile_recycle.layoutManager = mLayoutManager
-        profile_recycle.itemAnimator = DefaultItemAnimator()
-        initAuth()
         setSupportActionBar(toolbar)
         toolbar.setNavigationIcon(R.drawable.ic_action_back)
         toolbar.setNavigationOnClickListener {
@@ -57,7 +55,7 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(Intent(this@ProfileActivity, UploadActivity::class.java))
         }
         aksi()
-
+        getData()
     }
 
     private fun aksi(){
@@ -81,14 +79,22 @@ class ProfileActivity : AppCompatActivity() {
             if(i == null){
                 finish()
             }else{
-                acceptableToLoad = true
                 me = UserModel(i.uid,i.displayName.toString(),i.displayName.toString().toLowerCase(),i.email.toString(),i.photoUrl.toString())
                 bindData()
-                getData()
+//                getData()
             }
         }
         mAuth.addAuthStateListener(mAuthStateListeer)
+    }
 
+    override fun onStart() {
+        mAuth.addAuthStateListener(mAuthStateListeer)
+        super.onStart()
+    }
+
+    override fun onStop() {
+        mAuth.removeAuthStateListener(mAuthStateListeer)
+        super.onStop()
     }
 
     private fun bindData(){
@@ -100,7 +106,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun getData(){
-        val fo = FirebaseRecyclerOptions.Builder<IndividualPostModel>().setQuery(sDatabaseReference.child(me.uid), IndividualPostModel::class.java)
+        val fo = FirebaseRecyclerOptions.Builder<IndividualPostModel>().setQuery(sDatabaseReference.child(mAuth.currentUser!!.uid), IndividualPostModel::class.java)
                 .build()
 
         firebaseRecyclerAdapter = object : FirebaseRecyclerAdapter<IndividualPostModel, SingleListMainViewHolder>(fo){
@@ -113,17 +119,17 @@ class ProfileActivity : AppCompatActivity() {
 
             override fun onBindViewHolder(holder: SingleListMainViewHolder, position: Int, model: IndividualPostModel) {
                 val mainDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.POST).child(model.key)
+                mainDatabaseReference.keepSynced(true)
                 mainDatabaseReference.addValueEventListener(object : ValueEventListener{
                     override fun onCancelled(p0: DatabaseError?) {}
                     override fun onDataChange(p0: DataSnapshot?) {
                         if(p0 != null && p0.exists()){
                             val p = p0.getValue(PostModel::class.java)
                             if (p != null) {
-                                holder.harga.text = "Rp.${p.harga}"
+                                holder.harga.text = "Rp. ${p.harga}"
                                 holder.nama_barang.text = p.nama_barang
-                                holder.caption.text = p.caption
-                                holder.dateUploaded.text = AnotherMethods.getTimeDate(p.tanggal_post!!)
                                 val uDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.USERS).child(p.uid)
+                                uDatabaseReference.keepSynced(true)
                                 uDatabaseReference.addValueEventListener(object : ValueEventListener{
                                     override fun onCancelled(p0x: DatabaseError?) {}
                                     override fun onDataChange(p0x: DataSnapshot?) {
@@ -133,46 +139,55 @@ class ProfileActivity : AppCompatActivity() {
                                                 Glide.with(applicationContext).load(u.url_photo)
                                                         .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                                                         .into(holder.profilePicture)
-                                                holder.displayName.text = u.display_name
+                                                holder.displayName.text = " - " + u.display_name
                                             }
                                         }
                                     }
 
                                 })
                                 val ref2 : DatabaseReference = p0.ref.child("foto")
-                                val fo2 = FirebaseRecyclerOptions.Builder<ImageModel>().setQuery(ref2, ImageModel::class.java).build()
-                                val firebaseAdapter = object :  FirebaseRecyclerAdapter<ImageModel, HorizontalRVAdapter.ViewHolder>(fo2){
-                                    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HorizontalRVAdapter.ViewHolder {
-                                        val view : View = LayoutInflater.from(parent.context).inflate(R.layout.images_on_list, parent, false)
-                                        return HorizontalRVAdapter.ViewHolder(view)
-                                    }
-
-                                    override fun onBindViewHolder(holder: HorizontalRVAdapter.ViewHolder, position: Int, model: ImageModel) {
-                                        Glide.with(this@ProfileActivity).load(model.photosUrl)
-                                                .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.placeholder))
-                                                .into(holder.imageView)
-
-
-                                        holder.setOnItemClickListener(object : MyClickListener {
-                                            override fun onClick(v: View, position: Int, isLongClick: Boolean) {
-                                                Toast.makeText(this@ProfileActivity, "You clicked ${model.photosUrl}", Toast.LENGTH_SHORT).show()
+                                ref2.keepSynced(true)
+                                ref2.addValueEventListener(object : ValueEventListener{
+                                    override fun onCancelled(p0: DatabaseError?) {}
+                                    override fun onDataChange(p0: DataSnapshot?) {
+                                        if(p0 != null && p0.exists()){
+                                            listOfPhotos.clear()
+                                            for (ds in p0.children){
+                                                val im = ds.getValue(ImageModel::class.java)
+                                                if (im != null) {
+                                                    listOfPhotos.add(im)
+                                                }
                                             }
-                                        })
-                                    }
+                                            try{
+                                                var i = 0
+                                                while (listOfPhotos[i].photosUrl == null && i < listOfPhotos.size){
+                                                    i++
+                                                }
+                                                if(listOfPhotos[i].photosUrl != null){
+                                                    Glide.with(this@ProfileActivity).load(listOfPhotos[i].photosUrl)
+                                                            .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.placeholder))
+                                                            .into(holder.preview_image)
+                                                }else{
+                                                    Glide.with(this@ProfileActivity).load(R.drawable.no_image)
+                                                            .into(holder.preview_image)
+                                                }
+                                            }catch (e:Exception){
+                                                println("Preview Image Exception : " + e.message)
+                                            }
+                                        }else{
+                                            Glide.with(this@ProfileActivity).load(R.drawable.no_image)
+                                                    .into(holder.preview_image)
 
-                                }
-                                firebaseAdapter.notifyDataSetChanged()
-                                holder.horizontal_rv.adapter = firebaseAdapter
-                                firebaseAdapter.startListening()
+                                        }
+                                    }
+                                })
                             }
                         }
                     }
-
                 })
             }
         }
 
-        firebaseRecyclerAdapter.notifyDataSetChanged()
         profile_recycle.adapter = firebaseRecyclerAdapter
         firebaseRecyclerAdapter.startListening()
     }

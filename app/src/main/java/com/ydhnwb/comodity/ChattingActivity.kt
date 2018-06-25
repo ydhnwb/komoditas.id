@@ -6,6 +6,7 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -25,8 +26,6 @@ class ChattingActivity : AppCompatActivity() {
     private lateinit var mUserModel : UserModel
     private lateinit var targetUser : UserModel
     private lateinit var firebaseRecyclerAdapter : FirebaseRecyclerAdapter<ChatModelHelper, ChatMessageViewHolder>
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +49,9 @@ class ChattingActivity : AppCompatActivity() {
             override fun onDataChange(p0: DataSnapshot?) {
                 if((p0 != null)  && p0.exists()){
                     targetUser = p0.getValue(UserModel::class.java)!!
-                    toolbar.title = targetUser.display_name
+                    toolbar.title = " "
+                    dengan_siapa.text = targetUser.display_name
+                    Glide.with(applicationContext).load(targetUser.url_photo).into(dengan_profile)
                 }
             }
         })
@@ -85,13 +86,11 @@ class ChattingActivity : AppCompatActivity() {
                 val refChat = FirebaseDatabase.getInstance().getReference(Constant.CHAT).child(mUserModel.uid).child(getKeyPost())
                 val chatModel = ChatModel(teks,mUserModel.uid,ServerValue.TIMESTAMP)
                 val listOfChat = ListOfChatModel(getKeyPost())
-
-
                 refChat.addValueEventListener(object : ValueEventListener{
                     var isProgress = true
                     override fun onCancelled(p0: DatabaseError?) {}
                     override fun onDataChange(p0: DataSnapshot?) {
-                        if((p0 != null) && p0.exists()){
+                        if(p0 != null && p0.exists()){
                             if(isProgress){
                                 if(p0.hasChild("chat")){
                                     refChat.child("chat").push().setValue(chatModel)
@@ -112,14 +111,13 @@ class ChattingActivity : AppCompatActivity() {
                     }
                 })
 
-                //refChat.push().setValue(chatModel)
                 val oRefChat = FirebaseDatabase.getInstance().getReference(Constant.CHAT).child(getKeyPost()).child(mUserModel.uid)
                 val kList = ListOfChatModel(mUserModel.uid)
                 oRefChat.addValueEventListener(object : ValueEventListener{
                     var isProgress = true
                     override fun onCancelled(p0: DatabaseError?) {}
                     override fun onDataChange(p0: DataSnapshot?) {
-                        if((p0 != null) && p0.exists()){
+                        if(p0 != null && p0.exists()){
                             if(isProgress){
                                 if(p0.hasChild("chat")){
                                     oRefChat.child("chat").push().setValue(chatModel)
@@ -139,7 +137,6 @@ class ChattingActivity : AppCompatActivity() {
                         }
                     }
                 })
-
                 text_chat.text.clear()
             }
         })
@@ -162,9 +159,8 @@ class ChattingActivity : AppCompatActivity() {
                 holder.message.text =  model.message
             }
         }
-        firebaseRecyclerAdapter.notifyDataSetChanged();
+        firebaseRecyclerAdapter.notifyDataSetChanged()
         chat_recycle.adapter = firebaseRecyclerAdapter
-        firebaseRecyclerAdapter.startListening();
+        firebaseRecyclerAdapter.startListening()
     }
-
 }

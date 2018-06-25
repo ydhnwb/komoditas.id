@@ -10,9 +10,10 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="280dp"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
+
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
@@ -22,6 +23,11 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
+            <com.daimajia.slider.library.SliderLayout
+                android:id="@+id/detail_image_slider"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </com.daimajia.slider.library.SliderLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

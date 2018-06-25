@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
-import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -48,6 +47,10 @@ class LoginActivity : AppCompatActivity() {
             startActivityForResult(intent, Constant.REQUEST_CODE)
             //return
         }
+
+        close_login.setOnClickListener({
+            finish()
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -81,11 +84,10 @@ class LoginActivity : AppCompatActivity() {
         }
         mAuth.addAuthStateListener(mAuthStateListener)
     }
-
     override fun onStart() {
-        super.onStart()
         changeStatusbarBackground()
         mAuth.addAuthStateListener(mAuthStateListener)
+        super.onStart()
     }
     private fun changeStatusbarBackground(){
         if(Build.VERSION.SDK_INT >= 21){
@@ -95,33 +97,28 @@ class LoginActivity : AppCompatActivity() {
             w.statusBarColor = getDarkColor(Color.WHITE,0.5)
         }
     }
-
     private fun getDarkColor(i : Int, value : Double) : Int{
         val r = Color.red(i)
         val g = Color.green(i)
         val b = Color.blue(i)
         return Color.rgb((r*value).toInt(), (g*value).toInt(), (b*value).toInt())
     }
-
     override fun onStop() {
-        super.onStop()
         mAuth.removeAuthStateListener(mAuthStateListener)
+        super.onStop()
     }
-
     private fun initComponents() {
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build()
         mGoogleSignInCient = GoogleSignIn.getClient(this, googleSignInOptions)
     }
-
     private fun signIn() {
         google_sign_in.setOnClickListener({
             val intentActResult = mGoogleSignInCient.signInIntent
             startActivityForResult(intentActResult, Constant.RC_SIGN_IN)
         })
     }
-
     private fun processResult(task: Task<GoogleSignInAccount>) {
         try {
             val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
@@ -130,7 +127,6 @@ class LoginActivity : AppCompatActivity() {
             Log.d(TAG, "processResult : " + e.message)
         }
     }
-
     private fun goToMainActivity(){
         val intent = Intent(this@LoginActivity,MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -138,10 +134,9 @@ class LoginActivity : AppCompatActivity() {
         finish()
 
     }
-
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         try {
-            val credential: AuthCredential = GoogleAuthProvider.getCredential(acct.getIdToken(), null)
+            val credential: AuthCredential = GoogleAuthProvider.getCredential(acct.idToken, null)
             mAuth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
                 if (task.isSuccessful){
                     val user: FirebaseUser? = mAuth.currentUser
@@ -156,20 +151,15 @@ class LoginActivity : AppCompatActivity() {
                     print("Something went wrong..")
                 }
             }
-
         } catch (e: Exception) {
             Log.d(TAG, "firebaseAuth " + e.message)
         }
     }
 
     private fun updateUI(firebaseUser : FirebaseUser):Boolean{
-        if(firebaseUser == null){
-            return false
-        }else{
-            val mDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.USERS)
-            val userModel = UserModel(firebaseUser.uid,firebaseUser.displayName.toString(),firebaseUser.displayName.toString().toLowerCase(),firebaseUser.email.toString(),firebaseUser.photoUrl.toString())
-            mDatabaseReference.child(userModel.uid).setValue(userModel)
-            return true
-        }
+        val mDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.USERS)
+        val userModel = UserModel(firebaseUser.uid,firebaseUser.displayName.toString(),firebaseUser.displayName.toString().toLowerCase(),firebaseUser.email.toString(),firebaseUser.photoUrl.toString())
+        mDatabaseReference.child(userModel.uid).setValue(userModel)
+        return true
     }
 }

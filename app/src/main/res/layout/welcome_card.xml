@@ -8,7 +8,7 @@
     <RelativeLayout
         android:id="@+id/rl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:id="@+id/welcome_card_main"
@@ -20,7 +20,6 @@
                 android:layout_margin="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
@@ -46,6 +45,7 @@
                                 android:layout_width="60dp"
                                 android:layout_height="60dp" />
                             <TextView
+                                android:fontFamily="sans-serif-condensed"
                                 android:layout_gravity="center"
                                 android:text="PANEN"
                                 android:layout_width="wrap_content"
@@ -67,6 +67,7 @@
                                 android:layout_width="60dp"
                                 android:layout_height="60dp" />
                             <TextView
+                                android:fontFamily="sans-serif-condensed"
                                 android:layout_gravity="center"
                                 android:text="PUPUK"
                                 android:layout_width="wrap_content"
@@ -88,6 +89,7 @@
                                 android:layout_width="60dp"
                                 android:layout_height="60dp" />
                             <TextView
+                                android:fontFamily="sans-serif-condensed"
                                 android:layout_gravity="center"
                                 android:text="BIBIT"
                                 android:layout_width="wrap_content"
@@ -116,6 +118,7 @@
                                 android:layout_width="60dp"
                                 android:layout_height="60dp" />
                             <TextView
+                                android:fontFamily="sans-serif-condensed"
                                 android:layout_gravity="center"
                                 android:text="TERNAK"
                                 android:layout_width="wrap_content"
@@ -137,6 +140,7 @@
                                 android:layout_width="60dp"
                                 android:layout_height="60dp" />
                             <TextView
+                                android:fontFamily="sans-serif-condensed"
                                 android:layout_gravity="center"
                                 android:text="PROFIL"
                                 android:layout_width="wrap_content"
@@ -158,6 +162,7 @@
                                 android:layout_width="60dp"
                                 android:layout_height="60dp" />
                             <TextView
+                                android:fontFamily="sans-serif-condensed"
                                 android:layout_gravity="center"
                                 android:text="MORE"
                                 android:layout_width="wrap_content"
@@ -166,8 +171,6 @@
                     </LinearLayout>
 
                 </LinearLayout>
-
-
             </android.support.v7.widget.CardView>
         </RelativeLayout>
 
@@ -189,18 +192,21 @@
             android:background="@color/colorGrey"
             android:layout_width="match_parent"
             android:layout_height="2dp">
-
         </RelativeLayout>
-        <android.support.v7.widget.RecyclerView
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
+        <RelativeLayout
             android:layout_below="@id/separator_fy"
-            android:id="@+id/primary_recycler"
-            android:nestedScrollingEnabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:id="@+id/primary_recycler"
+                android:nestedScrollingEnabled="false"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </android.support.v7.widget.RecyclerView>
 
-        </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
 
 
     </RelativeLayout>

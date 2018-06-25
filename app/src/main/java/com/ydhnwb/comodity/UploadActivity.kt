@@ -60,7 +60,7 @@ class UploadActivity : AppCompatActivity(), RecyclerItemListener {
         addPhotos()
         fab.hide()
         fab.setOnClickListener {
-            pushPost()
+            this.pushPost()
             finish()
         }
         toolbar.setNavigationOnClickListener({
@@ -80,12 +80,25 @@ class UploadActivity : AppCompatActivity(), RecyclerItemListener {
         textWatcherCaption()
     }
 
+    private fun checkListImagesAcceptable() : Boolean{ return list.size > 0 }
+
+    private fun showHelpSwipe(){
+        if(list.isEmpty()){
+            swipe_left_help.visibility = View.GONE
+            fab.hide()
+        }else{
+            fab.show()
+            swipe_left_help.visibility = View.VISIBLE
+        }
+    }
 
     private fun textWatcherCaption(){
         caption_post.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 try {
-                    if(s?.length!! > 0){
+                    val n = judul_post.text.trim().toString()
+                    val h = harga_awal.text.trim().toString()
+                    if(s?.length!! > 0 && checkListImagesAcceptable() && !n.isEmpty() && !h.isEmpty()){
                         fab.show()
                     }else{
                         fab.hide()
@@ -95,11 +108,42 @@ class UploadActivity : AppCompatActivity(), RecyclerItemListener {
                     println(e.message)
                 }
             }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+        judul_post.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                try{
+                    val c = caption_post.text.trim().toString()
+                    val h = harga_awal.text.trim().toString()
+                    if(s?.length!! > 0 && checkListImagesAcceptable() && !c.isEmpty() && !h.isEmpty()){
+                        fab.show()
+                    }else{
+                        fab.hide()
+                    }
+                }catch (e:Exception){fab.hide()}
+            }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+        harga_awal.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                val j = judul_post.text.trim().toString()
+                val c = caption_post.text.trim().toString()
+                try{
+                    if(s?.length!! > 0 && checkListImagesAcceptable() && !j.isEmpty() && !c.isEmpty()){
+                        fab.show()
+                    }else{
+                        fab.hide()
+                    }
 
+                }catch (e:Exception){
+                    fab.hide()
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
     }
 
@@ -109,7 +153,7 @@ class UploadActivity : AppCompatActivity(), RecyclerItemListener {
             val uid = userModel.uid
             val harga = harga_awal.text.toString()
             val namabrg = judul_post.text.toString()
-            if(!captions.isEmpty() && !uid.isEmpty() && !harga.isEmpty() && !namabrg.isEmpty()){
+            if(!captions.isEmpty() && !uid.isEmpty() && !harga.isEmpty() && !namabrg.isEmpty() && list.size != 0){
                 val individualReference = FirebaseDatabase.getInstance().getReference(Constant.INDIVIDUAL_POST).child(uid)
                 val categorizedPost = FirebaseDatabase.getInstance().getReference(Constant.CATEGORIZED_POST).child(tipe_barang.selectedItem.toString())
                 val uploadModel = UploadPostModel(uid, ServerValue.TIMESTAMP, captions, harga, namabrg, tipe_barang.selectedItem.toString().toLowerCase())
@@ -165,10 +209,6 @@ class UploadActivity : AppCompatActivity(), RecyclerItemListener {
         ItemTouchHelper(c).attachToRecyclerView(list_photos_catatan)
     }
 
-    private fun showHelpSwipe(){
-        if(list.isEmpty()){ swipe_left_help.visibility = View.GONE }else{ swipe_left_help.visibility = View.VISIBLE }
-    }
-
     private fun initializeFirebase() {
         mAuth = FirebaseAuth.getInstance()
         mAuthListener = FirebaseAuth.AuthStateListener {
@@ -191,7 +231,6 @@ class UploadActivity : AppCompatActivity(), RecyclerItemListener {
             intent.action = Intent.ACTION_GET_CONTENT
             startActivityForResult(Intent.createChooser(intent, "Select picture"), Constant.REQUEST_CODE_IMAGE)
         }
-
     }
 
     private fun getFileName(uri : Uri) : String? {

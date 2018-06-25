@@ -6,7 +6,6 @@ package com.ydhnwb.comodity.Model
 class ImageModel {
     var photosUrl : String? = null
     constructor(){
-
     }
 
     constructor(photosUrl : String){

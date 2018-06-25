@@ -8,9 +8,6 @@ import android.text.Spanned
 import android.text.SpannableString
 import android.text.style.TypefaceSpan
 
-
-
-
 /**
  * Created by Prieyuda Akadita S on 22/05/2018.
  */
@@ -23,10 +20,9 @@ class SliderActivity : IntroActivity() {
         buttonCtaTintMode = IntroActivity.BUTTON_CTA_TINT_MODE_BACKGROUND
         val labelSpan = TypefaceSpan(
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) "sans-serif-medium" else "sans serif")
-        val label = SpannableString.valueOf("MULAI") //teks button
+        val label = SpannableString.valueOf("PAHAM") //teks button
         label.setSpan(labelSpan, 0, label.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         buttonCtaLabel = label
-
         pageScrollDuration = 500
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setPageScrollInterpolator(android.R.interpolator.fast_out_slow_in)
@@ -56,9 +52,7 @@ class SliderActivity : IntroActivity() {
                 .build())
 
 
-        autoplay(2500, IntroActivity.INFINITE) // 2500 adalah saat animasi berhenti sejenak yaitu selama 2.5 detik
-
+        autoplay(2500, IntroActivity.INFINITE)
     }
-
 
 }

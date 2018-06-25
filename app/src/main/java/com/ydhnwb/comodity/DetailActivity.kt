@@ -9,25 +9,33 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.daimajia.slider.library.SliderLayout
+import com.daimajia.slider.library.SliderTypes.BaseSliderView
+import com.daimajia.slider.library.SliderTypes.TextSliderView
+import com.daimajia.slider.library.Tricks.ViewPagerEx
+import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.ydhnwb.comodity.FirebaseMethods.AnotherMethods
+import com.ydhnwb.comodity.Model.ImageModel
 import com.ydhnwb.comodity.Model.PostModel
 import com.ydhnwb.comodity.Model.UserModel
-import com.ydhnwb.comodity.R.id.display_name_detail
-import com.ydhnwb.comodity.R.id.photo_profile_on_detail
 import com.ydhnwb.comodity.Utilities.Constant
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.bottom_bar_detail.*
 import kotlinx.android.synthetic.main.content_detail.*
+import com.google.firebase.database.DataSnapshot
 
-class DetailActivity : AppCompatActivity() {
+
+
+class DetailActivity : AppCompatActivity(), BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
 
     private lateinit var mAuth : FirebaseAuth
     private lateinit var mAuthStateListener: FirebaseAuth.AuthStateListener
     private lateinit var mDatabaseRefence : DatabaseReference
     private lateinit var mPostModel : PostModel
     private lateinit var mUserModel : UserModel
+    private lateinit var listOfImages : MutableList<ImageModel>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +46,8 @@ class DetailActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener({
             finish()
         })
+        listOfImages = ArrayList()
+        relative_bottom_detail.visibility = View.GONE
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
@@ -101,7 +111,24 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun getKeyPost() : String{
-        return intent.getStringExtra("KEYPOST") ?: throw IllegalArgumentException("Keypost is null")
+        return intent.getStringExtra("KEYPOST") ?: throw IllegalArgumentException("Keypost is null") as Throwable
+    }
+
+    override fun onStart() {
+        //detail_image_slider.startAutoCycle()
+        mAuth.addAuthStateListener(mAuthStateListener)
+        super.onStart()
+    }
+
+    override fun onStop() {
+        //detail_image_slider.stopAutoCycle()
+        mAuth.removeAuthStateListener(mAuthStateListener)
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        //detail_image_slider.stopAutoCycle()
+        super.onDestroy()
     }
 
     private fun initReference(){
@@ -116,8 +143,8 @@ class DetailActivity : AppCompatActivity() {
                      judul_post.text = mPostModel.nama_barang
                      tanggal_post_detail.text = AnotherMethods.getTimeDate(mPostModel.tanggal_post!!)
                      harga_on_detail.text = "Rp."+mPostModel.harga
-                     if (mUserModel.uid.equals(mPostModel.uid)){
-                         relative_bottom_detail.visibility = View.GONE
+                     if (!mUserModel.uid.equals(mPostModel.uid)){
+                         relative_bottom_detail.visibility = View.VISIBLE
                      }
                      val jDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.USERS).child(mPostModel.uid)
                      jDatabaseReference.addValueEventListener(object : ValueEventListener{
@@ -132,7 +159,7 @@ class DetailActivity : AppCompatActivity() {
                                                  .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)) .into(photo_profile_on_detail)
                                          photo_profile_on_detail.setOnClickListener({
                                              if (mUserModel.uid.equals(uModel.uid)){
-                                                 Toast.makeText(this@DetailActivity, "You are clicking yourself", Toast.LENGTH_SHORT).show()
+                                                 startActivity(Intent(this@DetailActivity, ProfileActivity::class.java))
                                              }else{
                                                  Toast.makeText(this@DetailActivity, "U r click other people", Toast.LENGTH_SHORT).show()
                                              }
@@ -146,5 +173,55 @@ class DetailActivity : AppCompatActivity() {
                 }
             }
         })
+        mDatabaseRefence.child(getKeyPost()).child("foto").addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError?) {}
+            override fun onDataChange(p0: DataSnapshot?) {
+                if(p0 != null && p0.exists()){
+                    listOfImages.clear()
+                    for (ds in p0.children) {
+                        val im = ds.getValue(ImageModel::class.java)
+                        if (im != null) {
+                            listOfImages.add(im)
+                        }
+                    }
+                    setImageSlider()
+                }
+            }
+        })
     }
+
+    private fun setImageSlider(){
+        var i = 0
+        while(i < listOfImages.size){
+            val o = TextSliderView(this)
+            o.image(listOfImages[i].photosUrl)
+                    .setScaleType(BaseSliderView.ScaleType.CenterCrop)
+                    .setOnSliderClickListener(this@DetailActivity)
+            o.bundle(Bundle())
+            o.bundle.putString("photoUrl", listOfImages[i].photosUrl)
+            detail_image_slider.addSlider(o)
+            i++
+            }
+        detail_image_slider.setPresetTransformer(SliderLayout.Transformer.Default)
+        detail_image_slider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom)
+        detail_image_slider.addOnPageChangeListener(this@DetailActivity)
+        detail_image_slider.stopAutoCycle()
+    }
+
+    override fun onSliderClick(slider: BaseSliderView?) {
+        if (slider != null) {
+            Toast.makeText(this@DetailActivity, slider.bundle.get("photoUrl").toString(), Toast.LENGTH_SHORT).show()
+        }
+    }
+    override fun onPageScrollStateChanged(state: Int) {
+    }
+
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+    }
+
+    override fun onPageSelected(position: Int) {
+    }
+
+
 }
+

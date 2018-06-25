@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="5"
-                android:hint="Nama barang"
+                android:hint="@string/nama_barang"
                 android:id="@+id/judul_post"/>
 
             <com.rengwuxian.materialedittext.MaterialEditText
@@ -33,7 +33,7 @@
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Harga"
+                android:hint="@string/harga"
                 android:inputType="numberDecimal"
                 android:id="@+id/harga_awal"
                 android:layout_marginTop="4dp"
@@ -60,14 +60,7 @@
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
-
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/almt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
         </RelativeLayout>
 
 
@@ -80,7 +73,7 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/list_photos_catatan"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 

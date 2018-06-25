@@ -28,12 +28,11 @@ import kotlinx.android.synthetic.main.filler_list_chat.*
 
 class ListChatActivity : AppCompatActivity() {
 
-
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mAuthStateListener: FirebaseAuth.AuthStateListener
     private lateinit var me: UserModel
     private lateinit var fireAdapter: FirebaseRecyclerAdapter<ListOfChatModel, ListOfChatViewHolder>
-    var mDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.CHAT)
+    private var mDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.CHAT)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +87,6 @@ class ListChatActivity : AppCompatActivity() {
                 val oDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.USERS).child(uid)
                 oDatabaseReference.addValueEventListener(object : ValueEventListener{
                     override fun onCancelled(p0: DatabaseError?) {}
-
                     override fun onDataChange(p0: DataSnapshot?) {
                         if((p0 != null) && p0.exists()){
                             val u = p0.getValue(UserModel::class.java)
@@ -100,7 +98,6 @@ class ListChatActivity : AppCompatActivity() {
                             }
                         }
                     }
-
                 })
 
                 holder.setOnItemClickListener(object : MyClickListener{
@@ -112,9 +109,7 @@ class ListChatActivity : AppCompatActivity() {
 
                 })
             }
-
         }
-
         fireAdapter.notifyDataSetChanged()
         list_of_chat_rv.adapter = fireAdapter
         fireAdapter.startListening()

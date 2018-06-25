@@ -4,7 +4,7 @@
     <string name="welcome">Selamat datang di Komoditas!</string>
     <string name="title_activity_upload">Jual</string>
     <string name="delete_this_item">Hapus</string>
-    <string name="caption">Tulis di sini</string>
+    <string name="caption">Tulis deskripsi di sini</string>
     <string name="swipe_left_to_delete">Geser ke kiri untuk menghapus</string>
     <string name="tambah_foto">Tambah foto</string>
     <string name="anda_yakin">Anda yakin ingin kembali?</string>
@@ -104,12 +104,18 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_activity_chatting">Pesan</string>
-    <string name="title_activity_profile">Profil</string>
+    <string name="title_activity_profile">Profil saya</string>
     <string name="title_activity_list_chat">Pesan langsung</string>
     <string name="title_activity_beli">Beli</string>
     <string name="batalkan_transaksi">Anda yakin ingin memabatalkan transaksi ini?</string>
     <string name="harap_isi_semua_form">Harap isi semua form</string>
     <string name="batal">BATAL</string>
+    <string name="image_preview_on_post">image preview on post</string>
+    <string name="harga">Harga</string>
+    <string name="selamat_datang">Selamat datang!</string>
+    <string name="deskripsi_login">Anda perlu masuk untuk melanjutkan. Pastikan anda mempunyai akun google yang ditautkan dengan ponsel ini</string>
+    <string name="terms_and_condition">Dengan sign in, anda menyetujui kebijakan privasi kami</string>
+    <string name="nama_barang">Judul</string>
 
     <string-array name="spinner_beli">
         <item>1</item>

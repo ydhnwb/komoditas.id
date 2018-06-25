@@ -10,13 +10,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_marginStart="64dp"
+                android:layout_centerVertical="true"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:id="@+id/dengan_profile"/>
+            <TextView
+                android:layout_marginStart="8dp"
+                android:layout_toRightOf="@id/dengan_profile"
+                android:maxLines="1"
+                android:id="@+id/dengan_siapa"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>
 
