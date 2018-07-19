@@ -2,19 +2,27 @@ package com.ydhnwb.comodity
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.danimahardhika.cafebar.CafeBar
+import com.danimahardhika.cafebar.CafeBarTheme
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.like.LikeButton
+import com.like.OnLikeListener
+import com.ydhnwb.comodity.FirebaseMethods.AnotherMethods
+import com.ydhnwb.comodity.Interfaces.MyClickListener
 import com.ydhnwb.comodity.Model.ImageModel
 import com.ydhnwb.comodity.Model.IndividualPostModel
 import com.ydhnwb.comodity.Model.PostModel
@@ -32,6 +40,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var firebaseRecyclerAdapter: FirebaseRecyclerAdapter<IndividualPostModel,SingleListMainViewHolder>
     private var sDatabaseReference : DatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.INDIVIDUAL_POST)
     private lateinit var listOfPhotos : MutableList<ImageModel>
+    private lateinit var likeDatabaseReference : DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,17 +68,17 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun aksi(){
-        profile_go_to_pengaturan.setOnClickListener({
+        profile_go_to_pengaturan.setOnClickListener {
             Toast.makeText(this@ProfileActivity, "Settings activity", Toast.LENGTH_SHORT).show()
-        })
+        }
 
-        profile_go_to_pesan.setOnClickListener({
+        profile_go_to_pesan.setOnClickListener {
             startActivity(Intent(this@ProfileActivity, ListChatActivity::class.java))
-        })
+        }
 
-        profile_go_to_transaksi.setOnClickListener({
+        profile_go_to_transaksi.setOnClickListener {
             Toast.makeText(this@ProfileActivity, "Transaction activity", Toast.LENGTH_SHORT).show()
-        })
+        }
     }
 
     private fun initAuth(){
@@ -85,6 +94,8 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
         mAuth.addAuthStateListener(mAuthStateListeer)
+        likeDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.LIKES)
+        likeDatabaseReference.keepSynced(true)
     }
 
     override fun onStart() {
@@ -181,10 +192,80 @@ class ProfileActivity : AppCompatActivity() {
                                         }
                                     }
                                 })
+                                holder.decideLikes(mainDatabaseReference.key)
+                                holder.likeButton.setOnLikeListener(object : OnLikeListener {
+                                    override fun liked(p0: LikeButton?) {
+                                        var isProgress = true
+                                        likeDatabaseReference.addValueEventListener(object : ValueEventListener{
+                                            override fun onCancelled(p0: DatabaseError?) {}
+                                            override fun onDataChange(p0: DataSnapshot?) {
+                                                if(p0 != null){
+                                                    if (isProgress) {
+                                                        if(!p0.child(mainDatabaseReference.key).hasChild(me.uid)){
+                                                            likeDatabaseReference.child(mainDatabaseReference.key).child(me.uid).setValue(true)
+                                                            AnotherMethods.counter(mainDatabaseReference.child("favorite"), true)
+                                                            isProgress = false
+                                                            CafeBar.builder(this@ProfileActivity).content("Favorite")
+                                                                    .theme(CafeBarTheme.LIGHT)
+                                                                    .contentTypeface("OpenSans-Regular.ttf").show()
+
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        })
+                                    }
+
+                                    override fun unLiked(p0: LikeButton?) {
+                                        var isProgress = true
+                                        likeDatabaseReference.addValueEventListener(object : ValueEventListener{
+                                            override fun onCancelled(p0: DatabaseError?) {}
+                                            override fun onDataChange(p0: DataSnapshot?) {
+                                                if(p0 != null){
+                                                    if (isProgress) {
+                                                        if(p0.child(mainDatabaseReference.key).hasChild(me.uid)){
+                                                            likeDatabaseReference.child(mainDatabaseReference.key).child(me.uid).removeValue()
+                                                            AnotherMethods.counter(mainDatabaseReference.child("favorite"), false)
+                                                            isProgress = false
+                                                            CafeBar.builder(this@ProfileActivity).content("Dihapus dari favorite")
+                                                                    .theme(CafeBarTheme.LIGHT)
+                                                                    .contentTypeface("OpenSans-Regular.ttf").show()
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                        })
+                                    }
+                                })
+                                holder.likeButton.isLiked = false
+                                holder.setOnLongItemClickListener(object : MyClickListener {
+                                    override fun onClick(v: View, position: Int, isLongClick: Boolean) {
+                                        val tDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.POST).child(getRef(position).key)
+                                        tDatabaseReference.addValueEventListener(object : ValueEventListener{
+                                            override fun onCancelled(p0: DatabaseError?) {}
+                                            override fun onDataChange(p0: DataSnapshot?) {
+                                                if(p0 != null && p0.exists()){
+                                                    val postModel = p0.getValue(PostModel::class.java)
+                                                    if(postModel != null && me.uid.equals(postModel.uid)){
+                                                        val opt = AlertDialog.Builder(this@ProfileActivity)
+                                                        opt.setMessage("Lorem ipsum dolor sir amet consectuer").setCancelable(false)
+                                                                .setPositiveButton("LOREM") { dialog, _ -> dialog?.cancel() }
+                                                                .setNegativeButton("CONSECTUER") { dialog, _ -> dialog?.cancel() }
+                                                        val alertDialog = opt.create()
+                                                        alertDialog.show()
+                                                    }
+                                                }
+                                            }
+                                        })
+                                    }
+                                })
                             }
                         }
                     }
                 })
+
+
             }
         }
 

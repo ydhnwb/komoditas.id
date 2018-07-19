@@ -4,14 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:fancy="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root_mainActivityLayout"
-    android:background="@color/colorWhite"
-    tools:context="com.ydhnwb.comodity.MainActivity">
+    tools:context=".CariActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="2dp"
         android:theme="@style/AppTheme.AppBarOverlay">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -21,52 +19,45 @@
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
                 android:background="?android:attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay">
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            </android.support.v7.widget.Toolbar>
             <com.arlib.floatingsearchview.FloatingSearchView
-                android:id="@+id/search_onSA"
+                android:id="@+id/search"
                 android:padding="8dp"
                 android:layout_centerVertical="true"
                 app:floatingSearch_searchSuggestionTextSize="0dp"
                 app:floatingSearch_dimBackground="false"
                 app:floatingSearch_showSearchKey="false"
                 app:floatingSearch_searchHint="Cari di Komoditas.id"
-                app:floatingSearch_leftActionMode="noLeftAction"
-                app:floatingSearch_menu="@menu/menu_main"
+                app:floatingSearch_leftActionMode="showHome"
                 android:layout_width="match_parent"
                 app:floatingSearch_close_search_on_keyboard_dismiss="true"
                 android:layout_height="wrap_content">
             </com.arlib.floatingsearchview.FloatingSearchView>
 
+
         </RelativeLayout>
-        </android.support.design.widget.AppBarLayout>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            app:tabMode="fixed"
+            android:background="@color/colorWhite"
+            app:tabGravity="fill"
+            app:tabSelectedTextColor="@color/materialBlack"
+            app:tabTextColor="#e0e0e0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </android.support.design.widget.TabLayout>
+    </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main"/>
 
-    <mehdi.sakout.fancybuttons.FancyButton
-        fancy:fb_radius="20dp"
-        android:id="@+id/fab"
-        android:layout_margin="16dp"
-        fancy:fb_defaultColor="@color/colorWhite"
-        fancy:fb_focusColor="@color/colorPrimary"
-        fancy:fb_text="ADD NEW POST"
-        android:textSize="12sp"
-        fancy:fb_textColor="@color/colorPrimary"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_width="wrap_content"
-        android:elevation="2dp"
-        android:layout_height="wrap_content">
+    <include layout="@layout/content_cari" />
 
-    </mehdi.sakout.fancybuttons.FancyButton>
-
-    <!-- <android.support.design.widget.FloatingActionButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_action_create_orange" />
-        -->
+        app:srcCompat="@android:drawable/ic_dialog_email" />
 
 </android.support.design.widget.CoordinatorLayout>

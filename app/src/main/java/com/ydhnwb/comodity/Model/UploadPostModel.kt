@@ -10,16 +10,19 @@ class UploadPostModel {
     lateinit var harga : String
     lateinit var nama_barang : String
     lateinit var tipe_barang : String
+    var favorite : Int = 0
 
     constructor(){}
 
-    constructor(uid: String, tanggal_post: MutableMap<String, String>, caption: String, harga : String, nama_barang : String, tipe_barang : String){
+    constructor(uid: String, tanggal_post: MutableMap<String, String>, caption: String,
+                harga : String, nama_barang : String, tipe_barang : String, favorite : Int){
         this.uid = uid
         this.tanggal_post = tanggal_post
         this.caption = caption
         this.harga = harga
         this.nama_barang = nama_barang
         this.tipe_barang = tipe_barang
+        this.favorite = 0
     }
 
 

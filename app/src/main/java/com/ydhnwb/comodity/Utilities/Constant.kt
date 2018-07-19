@@ -10,6 +10,9 @@ class Constant {
         const val STATUS = "WAITING"
         const val POST = "POST"
         const val CHAT = "CHAT"
+        const val LIKES = "LIKES"
+
+
         const val INDIVIDUAL_POST = "INDIVIDUAL_POST"
         const val CATEGORIZED_POST = "CATEGORIZED_POST"
         const val IMAGE_POST = "IMAGE_POST"
@@ -21,5 +24,6 @@ class Constant {
         //material intro
         const val NONAKTIFKAN_PERTAMA_KALI = "NONAKTIFKAN_PERTAMA"
         const val REQUEST_CODE = 3
+
     }
 }

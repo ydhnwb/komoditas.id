@@ -63,7 +63,7 @@ class UploadActivity : AppCompatActivity(), RecyclerItemListener {
             this.pushPost()
             finish()
         }
-        toolbar.setNavigationOnClickListener({
+        toolbar.setNavigationOnClickListener {
             val s :String = caption_post.text.toString()
             if(!s.isEmpty() || !harga_awal.text.isEmpty()){
                 val builder : AlertDialog.Builder = AlertDialog.Builder(this@UploadActivity)
@@ -75,7 +75,7 @@ class UploadActivity : AppCompatActivity(), RecyclerItemListener {
             }else{
                 finish()
             }
-        })
+        }
         showHelpSwipe()
         textWatcherCaption()
     }
@@ -156,7 +156,7 @@ class UploadActivity : AppCompatActivity(), RecyclerItemListener {
             if(!captions.isEmpty() && !uid.isEmpty() && !harga.isEmpty() && !namabrg.isEmpty() && list.size != 0){
                 val individualReference = FirebaseDatabase.getInstance().getReference(Constant.INDIVIDUAL_POST).child(uid)
                 val categorizedPost = FirebaseDatabase.getInstance().getReference(Constant.CATEGORIZED_POST).child(tipe_barang.selectedItem.toString())
-                val uploadModel = UploadPostModel(uid, ServerValue.TIMESTAMP, captions, harga, namabrg, tipe_barang.selectedItem.toString().toLowerCase())
+                val uploadModel = UploadPostModel(uid, ServerValue.TIMESTAMP, captions, harga, namabrg, tipe_barang.selectedItem.toString().toLowerCase(), 0)
                 val generatedKey = mDatabaseReference.push().key
                 mDatabaseReference.child(generatedKey).setValue(uploadModel)
                 val ind = IndividualPostModel(generatedKey, uid)
@@ -186,9 +186,9 @@ class UploadActivity : AppCompatActivity(), RecyclerItemListener {
                     mStorageTask = storageReference.putBytes(data).addOnSuccessListener { taskSnapshot ->
                         val imageUrl = ImageModel(taskSnapshot.downloadUrl.toString())
                         sDatabaseReference.child(generatedKey).child("foto").push().setValue(imageUrl)
-                    }.addOnFailureListener({
+                    }.addOnFailureListener {
                         println("Cannot upload caused by ${it.message}")
-                    })
+                    }
                     i++
                 }
             }
@@ -297,10 +297,10 @@ class UploadActivity : AppCompatActivity(), RecyclerItemListener {
             val i : PopulateImagesModel = list[viewHolder.adapterPosition]
             val delete = viewHolder.adapterPosition
             adapterVH.removeItem(delete)
-            val snack = Snackbar.make(rootCoordinatorLayout,"$s dihapus",Snackbar.LENGTH_SHORT).setAction(R.string.batal,{
+            val snack = Snackbar.make(rootCoordinatorLayout,"$s dihapus",Snackbar.LENGTH_SHORT).setAction(R.string.batal) {
                 adapterVH.undoDeleteItem(i,delete)
                 showHelpSwipe()
-            })
+            }
             snack.setActionTextColor(Color.RED)
             snack.show()
             showHelpSwipe()

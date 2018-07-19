@@ -1,5 +1,6 @@
 package com.ydhnwb.comodity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -13,7 +14,6 @@ import com.daimajia.slider.library.SliderLayout
 import com.daimajia.slider.library.SliderTypes.BaseSliderView
 import com.daimajia.slider.library.SliderTypes.TextSliderView
 import com.daimajia.slider.library.Tricks.ViewPagerEx
-import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.ydhnwb.comodity.FirebaseMethods.AnotherMethods
@@ -43,9 +43,9 @@ class DetailActivity : AppCompatActivity(), BaseSliderView.OnSliderClickListener
         setContentView(R.layout.activity_detail)
         setSupportActionBar(toolbar)
         toolbar.setNavigationIcon(R.drawable.ic_action_back)
-        toolbar.setNavigationOnClickListener({
+        toolbar.setNavigationOnClickListener {
             finish()
-        })
+        }
         listOfImages = ArrayList()
         relative_bottom_detail.visibility = View.GONE
         fab.setOnClickListener { view ->
@@ -59,17 +59,17 @@ class DetailActivity : AppCompatActivity(), BaseSliderView.OnSliderClickListener
     }
 
     private fun kirimPesanAndBeli(){
-        kirimpesan.setOnClickListener({
+        kirimpesan.setOnClickListener {
             val c = Intent(this@DetailActivity, ChattingActivity::class.java)
             c.putExtra("KEYPOST", mPostModel.uid)
             startActivity(c)
-        })
+        }
 
-        beli.setOnClickListener({
+        beli.setOnClickListener {
             val g = Intent(this@DetailActivity, BeliActivity::class.java)
             g.putExtra("KEYPOST", getKeyPost())
             startActivity(g)
-        })
+        }
     }
 
     private fun initCollapsingToolbar(){
@@ -100,7 +100,7 @@ class DetailActivity : AppCompatActivity(), BaseSliderView.OnSliderClickListener
         mAuth = FirebaseAuth.getInstance()
         mAuthStateListener = FirebaseAuth.AuthStateListener {
             val user = it.currentUser
-            if(user == null){
+            if(null == user){
              finish()
             }else{
                 mUserModel = UserModel(user.uid,user.displayName.toString(),user.displayName.toString().toLowerCase(),user.email.toString(),user.photoUrl.toString())
@@ -127,7 +127,8 @@ class DetailActivity : AppCompatActivity(), BaseSliderView.OnSliderClickListener
     }
 
     override fun onDestroy() {
-        //detail_image_slider.stopAutoCycle()
+        //Glide.with(this@DetailActivity).pauseRequests();
+        detail_image_slider.stopAutoCycle()
         super.onDestroy()
     }
 
@@ -135,6 +136,7 @@ class DetailActivity : AppCompatActivity(), BaseSliderView.OnSliderClickListener
         mDatabaseRefence = FirebaseDatabase.getInstance().getReference(Constant.POST)
         mDatabaseRefence.child(getKeyPost()).addValueEventListener(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError?) {}
+            @SuppressLint("SetTextI18n")
             override fun onDataChange(p0: DataSnapshot?) {
                 if(p0 != null){
                  if(p0.exists()){
@@ -143,31 +145,32 @@ class DetailActivity : AppCompatActivity(), BaseSliderView.OnSliderClickListener
                      judul_post.text = mPostModel.nama_barang
                      tanggal_post_detail.text = AnotherMethods.getTimeDate(mPostModel.tanggal_post!!)
                      harga_on_detail.text = "Rp."+mPostModel.harga
+                     diminati.text = " - diminati ${mPostModel.favorite} orang"
                      if (!mUserModel.uid.equals(mPostModel.uid)){
                          relative_bottom_detail.visibility = View.VISIBLE
                      }
                      val jDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.USERS).child(mPostModel.uid)
-                     jDatabaseReference.addValueEventListener(object : ValueEventListener{
+                     jDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener{
                          override fun onCancelled(p0: DatabaseError?) {}
                          override fun onDataChange(p0: DataSnapshot?) {
-                             if(p0 !=  null){
-                                 if(p0.exists()){
-                                     val uModel = p0.getValue(UserModel::class.java)
-                                     if (uModel != null) {
-                                         display_name_detail.text = uModel.display_name
-                                         Glide.with(this@DetailActivity).load(uModel.url_photo)
-                                                 .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)) .into(photo_profile_on_detail)
-                                         photo_profile_on_detail.setOnClickListener({
-                                             if (mUserModel.uid.equals(uModel.uid)){
-                                                 startActivity(Intent(this@DetailActivity, ProfileActivity::class.java))
-                                             }else{
-                                                 Toast.makeText(this@DetailActivity, "U r click other people", Toast.LENGTH_SHORT).show()
-                                             }
-                                         })
+                             if(p0 != null && p0.exists()){
+                                 val uModel = p0.getValue(UserModel::class.java)
+                                 if(uModel != null){
+                                     display_name_detail.text = uModel.display_name
+                                     Glide.with(applicationContext).load(uModel.url_photo)
+                                             .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC))
+                                             .into(photo_profile_on_detail)
+                                     photo_profile_on_detail.setOnClickListener {
+                                         if(mUserModel.uid.equals(uModel.uid)){
+                                             startActivity(Intent(this@DetailActivity, ProfileActivity::class.java))
+                                         }else{
+                                             Toast.makeText(this@DetailActivity, "Other profile Activity", Toast.LENGTH_SHORT).show()
+                                         }
                                      }
                                  }
                              }
                          }
+
                      })
                  }
                 }

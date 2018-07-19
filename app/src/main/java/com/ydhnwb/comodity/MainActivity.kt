@@ -28,6 +28,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.welcome_card.*
 import com.google.firebase.database.DataSnapshot
 import android.support.v7.widget.SimpleItemAnimator
+import com.danimahardhika.cafebar.CafeBar
+import com.danimahardhika.cafebar.CafeBarTheme
+import com.like.LikeButton
+import com.like.OnLikeListener
+import com.ydhnwb.comodity.FirebaseMethods.AnotherMethods
 import com.ydhnwb.comodity.Utilities.NetworkManager
 
 class MainActivity : AppCompatActivity() {
@@ -38,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var firebaseRecyclerAdapter : FirebaseRecyclerAdapter<PostModel,SingleListMainViewHolder>
     private lateinit var mDatabaseReference: DatabaseReference
     private lateinit var mFirebaseDatabase: FirebaseDatabase
+    private lateinit var likeDatabaseReference : DatabaseReference
     companion object {
         private var calledAlready : Boolean = false
         private var checkingBack = false
@@ -49,10 +55,15 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.title = " "
         initReference()
-        fab.setOnClickListener { startActivity(Intent(this@MainActivity, UploadActivity::class.java)) }
+        search_onSA.setShowSearchKey(true)
+        fab.setOnClickListener {
+            startActivity(Intent(this@MainActivity, UploadActivity::class.java))
+        }
         cardAction()
         getData()
     }
+
+
 
     override fun onStop() {
         mAuth.removeAuthStateListener(mAuthStateListener)
@@ -64,24 +75,32 @@ class MainActivity : AppCompatActivity() {
         if(checkingBack){
             if(NetworkManager.isConnected(this@MainActivity)){
                 checkingBack = false
-                Snackbar.make(root_mainActivityLayout, "Koneksi telah kembali", Snackbar.LENGTH_LONG).show()
-            }
+                //Snackbar.make(root_mainActivityLayout, "Koneksi telah kembali", Snackbar.LENGTH_LONG).show()
+                CafeBar.builder(this@MainActivity).content("Koneksi internet telah pulih")
+                        .theme(CafeBarTheme.LIGHT)
+                        .contentTypeface("OpenSans-Regular.ttf").show()
+                        //.contentTypeface(Typeface.createFromAsset(this@MainActivity.getAssets(), "fonts/RobotoMono-Regular.ttf")
+                        //.show();
+
+                }
         }
         super.onStart()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
+    /*override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        //menuInflater.inflate(R.menu.menu_main, menu)
+        //return true
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+        /*return when (item.itemId) {
             R.id.action_settings ->
                 true
             else -> super.onOptionsItemSelected(item)
-        }
-    }
+        }*/
+        return false
+    }*/
 
     private fun initFirebase(){
         mAuth = FirebaseAuth.getInstance()
@@ -120,9 +139,15 @@ class MainActivity : AppCompatActivity() {
         mDatabaseReference = mFirebaseDatabase.getReference(Constant.POST)
         mDatabaseReference.keepSynced(true)
         initFirebase()
+        likeDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.LIKES)
+        likeDatabaseReference.keepSynced(true)
         if(!NetworkManager.isConnected(this@MainActivity)){
             checkingBack = true
-            Snackbar.make(root_mainActivityLayout, "Tidak ada koneksi internet", Snackbar.LENGTH_LONG).show()
+            //Snackbar.make(root_mainActivityLayout, "Tidak ada koneksi internet", Snackbar.LENGTH_LONG).show()
+            CafeBar.builder(this@MainActivity).content("Tidak ada koneksi internet")
+                    .theme(CafeBarTheme.LIGHT)
+                    .contentTypeface("OpenSans-Regular.ttf").show()
+
         }
     }
 
@@ -147,7 +172,7 @@ class MainActivity : AppCompatActivity() {
                         if(p0 != null && p0.exists()){
                             val u : UserModel? = p0.getValue(UserModel::class.java)
                             if(u != null){
-                                holder.displayName.text = " - " + u.display_name
+                                holder.displayName.text = u.display_name
                                 Glide.with(applicationContext).load(u.url_photo)
                                         .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                                         .into(holder.profilePicture)
@@ -163,9 +188,9 @@ class MainActivity : AppCompatActivity() {
                     }
                 })
 
-                val gDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.POST).child(getRef(position).key).child("foto")
+                val gDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.POST).child(getRef(position).key)
                 gDatabaseReference.keepSynced(true)
-                gDatabaseReference.addValueEventListener(object : ValueEventListener{
+                gDatabaseReference.child("foto").addValueEventListener(object : ValueEventListener{
                     override fun onCancelled(p0: DatabaseError?) { println("Cannot fetch image from the server...") }
                     override fun onDataChange(p0: DataSnapshot?) {
                         if(p0 != null && p0.exists()){
@@ -199,7 +224,53 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 })
+                holder.decideLikes(getRef(position).key)
+                holder.likeButton.setOnLikeListener(object : OnLikeListener{
 
+                    override fun liked(p0: LikeButton?) {
+                        var isProgress = true
+                        likeDatabaseReference.addValueEventListener(object : ValueEventListener{
+                            override fun onCancelled(p0: DatabaseError?) {}
+                            override fun onDataChange(p0: DataSnapshot?) {
+                                if(p0 != null){
+                                    if (isProgress) {
+                                            if(!p0.child(getRef(position).key).hasChild(user.uid)){
+                                                likeDatabaseReference.child(getRef(position).key).child(user.uid).setValue(true)
+                                                AnotherMethods.counter(gDatabaseReference.child("favorite"), true)
+                                                isProgress = false
+                                                CafeBar.builder(this@MainActivity).content("Favorit")
+                                                        .theme(CafeBarTheme.LIGHT)
+                                                        .contentTypeface("OpenSans-Regular.ttf").show()
+                                            }
+                                    }
+                                }
+                            }
+                        })
+                    }
+
+                    override fun unLiked(p0: LikeButton?) {
+                        var isProgress = true
+                        likeDatabaseReference.addValueEventListener(object : ValueEventListener{
+                            override fun onCancelled(p0: DatabaseError?) {}
+                            override fun onDataChange(p0: DataSnapshot?) {
+                                if(p0 != null){
+                                    if (isProgress) {
+                                        if(p0.child(getRef(position).key).hasChild(user.uid)){
+                                            likeDatabaseReference.child(getRef(position).key).child(user.uid).removeValue()
+                                            AnotherMethods.counter(gDatabaseReference.child("favorite"), false)
+                                            isProgress = false
+                                            CafeBar.builder(this@MainActivity).content("Dihapus dari favorit")
+                                                    .theme(CafeBarTheme.LIGHT)
+                                                    .contentTypeface("OpenSans-Regular.ttf").show()
+                                        }
+                                    }
+                                }
+                            }
+
+                        })
+                    }
+                })
+                //holder.likeButton.isLiked = false
                 holder.setOnLongItemClickListener(object : MyClickListener{
                     override fun onClick(v: View, position: Int, isLongClick: Boolean) {
                         val tDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.POST).child(getRef(position).key)
@@ -234,6 +305,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun makeReq(){
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 22)
     }
@@ -243,7 +315,8 @@ class MainActivity : AppCompatActivity() {
     }*/
 
     private fun cardAction(){
-        main_to_profil.setOnClickListener({ startActivity(Intent(this@MainActivity, ProfileActivity::class.java)) })
+        main_to_profil.setOnClickListener { startActivity(Intent(this@MainActivity, ProfileActivity::class.java)) }
+        main_to_bibit.setOnClickListener { startActivity(Intent(this@MainActivity, CariActivity::class.java)) }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

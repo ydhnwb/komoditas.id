@@ -18,7 +18,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SliderActivity"
+            android:name=".IntroAct.SliderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Intro" />
         <activity
@@ -52,18 +52,25 @@
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ListChatActivity"
             android:label="@string/title_activity_list_chat"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CariActivity"
+            android:label="@string/title_activity_cari"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".BeliActivity"
             android:label="@string/title_activity_beli"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main2Activity"
+            android:label="@string/title_activity_main2"
             android:theme="@style/AppTheme.NoActionBar">
+
         </activity>
     </application>
 

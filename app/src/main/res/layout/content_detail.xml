@@ -30,13 +30,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/judul_post"/>
-            <TextView
-                android:id="@+id/harga_on_detail"
-                android:textSize="18sp"
-                android:text=""
-                android:textStyle="bold"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/harga_on_detail"
+                    android:textSize="18sp"
+                    android:text=""
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/diminati"
+                    android:textSize="14sp"
+                    android:text=""
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"

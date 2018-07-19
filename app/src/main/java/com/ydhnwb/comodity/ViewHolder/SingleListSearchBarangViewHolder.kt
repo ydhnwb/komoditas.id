@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -14,33 +15,27 @@ import com.ydhnwb.comodity.Interfaces.MyClickListener
 import com.ydhnwb.comodity.R
 import com.ydhnwb.comodity.Utilities.Constant
 import de.hdodenhof.circleimageview.CircleImageView
-import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.*
 
-
-
-/**
- * Created by Prieyuda Akadita S on 19/05/2018.
- */
-class SingleListMainViewHolder(itemView : View, context : Context ) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
-    var preview_image : ImageView
-    var profilePicture : CircleImageView
-    var displayName : TextView
+class SingleListSearchBarangViewHolder(itemView : View, context : Context) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
+    var image_barang : ImageView
+    var foto_profil : CircleImageView
     var nama_barang : TextView
+    var harga : TextView
+    var display_name : TextView
+    var like_button : LikeButton
     var onShortClickListener : MyClickListener? = null
     var onLongClickListener : MyClickListener? = null
-    var harga : TextView
-    var likeButton : LikeButton
     private var likesDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.LIKES)
     private lateinit var cAuth : FirebaseAuth
 
-    init{
-        preview_image = itemView.findViewById(R.id.preview_image)
-        nama_barang = itemView.findViewById(R.id.nama_barang_on_list)
-        profilePicture = itemView.findViewById(R.id.user_profile_on_list)
-        displayName = itemView.findViewById(R.id.user_name_on_list)
-        harga = itemView.findViewById(R.id.harga_on_list)
-        likeButton = itemView.findViewById(R.id.likeButton)
-        likesDatabaseReference.keepSynced(true)
+    init {
+        image_barang = itemView.findViewById(R.id.preview_image_on_barang_search)
+        foto_profil = itemView.findViewById(R.id.foto_profil_on_search)
+        nama_barang = itemView.findViewById(R.id.nama_barang_on_search)
+        harga = itemView.findViewById(R.id.harga_on_search)
+        display_name = itemView.findViewById(R.id.display_name_on_search)
+        like_button = itemView.findViewById(R.id.like_on_search)
         itemView.setOnClickListener(this)
         itemView.setOnLongClickListener(this)
     }
@@ -53,7 +48,6 @@ class SingleListMainViewHolder(itemView : View, context : Context ) : RecyclerVi
         onLongClickListener?.onClick(v!!,adapterPosition,true)
         return false
     }
-
     fun setOnLongItemClickListener(longClick : MyClickListener){
         this.onLongClickListener = longClick
     }
@@ -66,18 +60,18 @@ class SingleListMainViewHolder(itemView : View, context : Context ) : RecyclerVi
         cAuth = FirebaseAuth.getInstance()
         val u = cAuth.currentUser
         if(u != null){
-            likesDatabaseReference.child(uidPost).addValueEventListener(object : ValueEventListener{
+            likesDatabaseReference.child(uidPost).addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError?) {}
                 override fun onDataChange(p0: DataSnapshot?) {
                     if(p0 != null && p0.exists()){
                         if(p0.hasChild(u.uid)){
-                            likeButton.isLiked = true
+                            like_button.isLiked = true
                         }
                     }
                 }
+
             })
 
         }
     }
-
 }

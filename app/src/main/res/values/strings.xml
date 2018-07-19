@@ -112,8 +112,8 @@
     <string name="batal">BATAL</string>
     <string name="image_preview_on_post">image preview on post</string>
     <string name="harga">Harga</string>
-    <string name="selamat_datang">Selamat datang!</string>
-    <string name="deskripsi_login">Anda perlu masuk untuk melanjutkan. Pastikan anda mempunyai akun google yang ditautkan dengan ponsel ini</string>
+    <string name="selamat_datang">Selamat datang</string>
+    <string name="deskripsi_login">Anda perlu masuk untuk melanjutkan. Pastikan anda memiliki akun google yang ditautkan dengan ponsel ini.</string>
     <string name="terms_and_condition">Dengan sign in, anda menyetujui kebijakan privasi kami</string>
     <string name="nama_barang">Judul</string>
 
@@ -131,4 +131,10 @@
         <item>BENIH</item>
         <item>TERNAK</item>
     </string-array>
+    <string name="title_activity_cari">CariActivity</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

@@ -6,6 +6,7 @@ package com.ydhnwb.comodity.Model
 class PostModel {
     lateinit var uid : String
     var tanggal_post : Long? = null
+    var favorite : Int? = null
     lateinit var caption :String
     lateinit var harga : String
     lateinit var nama_barang : String
@@ -13,11 +14,12 @@ class PostModel {
 
     constructor(){}
 
-    constructor(uid: String, tanggal_post: Long, caption: String, harga : String, nama_barang : String, tipe_barang : String){
+    constructor(uid: String, tanggal_post: Long, caption: String, harga : String, nama_barang : String, tipe_barang : String, favorite : Int){
         this.uid = uid
         this.tanggal_post = tanggal_post
         this.caption = caption
         this.harga = harga
+        this.favorite = favorite
         this.nama_barang = nama_barang
         this.tipe_barang = tipe_barang
     }
