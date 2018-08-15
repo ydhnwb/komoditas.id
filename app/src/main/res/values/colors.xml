@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ff5252</color>
+    <color name="colorPrimary">#536dfe</color>
+    <color name="colorPrimaryBackup">#ff5252</color>
     <color name="colorPrimaryX">#d73535</color>
-    <color name="colorPrimaryDark">#d73535</color>
+    <color name="colorPrimaryDark">#3d55fe</color>
+    <color name="colorPrimaryDarkBackup">#d73535</color>
     <color name="colorAccent">#212121</color>
     <color name="colorWhite">#FFF</color>
     <color name="colorGreyFani">#40404040</color>
@@ -26,6 +28,9 @@
     <color name="color_dark_custom_fragment_1">#BF360C</color>
     <color name="color_dark_custom_fragment_2">#303F9F</color>
     <color name="color_dark_canteen">#ebeef0</color>
+
+    <color name="color_blue_google_io">#536dfe</color>
+    <color name="color_blue_google_io_dark">#3d55fe</color>
 
 
 </resources>

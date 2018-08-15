@@ -1,6 +1,7 @@
 package com.ydhnwb.comodity
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -49,18 +50,25 @@ class UploadActivity : AppCompatActivity(), RecyclerItemListener {
     private lateinit var list: MutableList<PopulateImagesModel>
     private lateinit var adapterVH: PopulateImagesViewHolder
     private lateinit var mStorageTask : StorageTask<UploadTask.TaskSnapshot>
+    private lateinit var mProgressDialog : ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upload)
         setSupportActionBar(toolbar)
         toolbar.setNavigationIcon(R.drawable.ic_action_back)
+        mProgressDialog = ProgressDialog(this@UploadActivity)
         initializeFirebase()
         initComponent()
         addPhotos()
         fab.hide()
         fab.setOnClickListener {
+            mProgressDialog.setMessage("Sedang mengupload...")
+            mProgressDialog.isIndeterminate = true
+            mProgressDialog.setCancelable(false)
+            mProgressDialog.show()
             this.pushPost()
+            mProgressDialog.dismiss()
             finish()
         }
         toolbar.setNavigationOnClickListener {
@@ -154,13 +162,17 @@ class UploadActivity : AppCompatActivity(), RecyclerItemListener {
             val harga = harga_awal.text.toString()
             val namabrg = judul_post.text.toString()
             if(!captions.isEmpty() && !uid.isEmpty() && !harga.isEmpty() && !namabrg.isEmpty() && list.size != 0){
+
                 val individualReference = FirebaseDatabase.getInstance().getReference(Constant.INDIVIDUAL_POST).child(uid)
                 val categorizedPost = FirebaseDatabase.getInstance().getReference(Constant.CATEGORIZED_POST).child(tipe_barang.selectedItem.toString())
-                val uploadModel = UploadPostModel(uid, ServerValue.TIMESTAMP, captions, harga, namabrg, tipe_barang.selectedItem.toString().toLowerCase(), 0)
+                val uploadModel = UploadPostModel(uid, ServerValue.TIMESTAMP, captions, harga, namabrg, namabrg.toLowerCase(),
+                        tipe_barang.selectedItem.toString().toLowerCase(), 0,
+                        tipe_barang.selectedItem.toString().toLowerCase()+"_"+namabrg.toLowerCase())
                 val generatedKey = mDatabaseReference.push().key
                 mDatabaseReference.child(generatedKey).setValue(uploadModel)
                 val ind = IndividualPostModel(generatedKey, uid)
-                individualReference.push().setValue(ind)
+                //individualReference.push().setValue(ind)
+                individualReference.child(generatedKey).setValue(ind)
                 categorizedPost.push().setValue(ind)
                 uploadPhotos(generatedKey)
             }else{ Snackbar.make(rootCoordinatorLayout, R.string.harap_isi_semua_form, Snackbar.LENGTH_LONG).show() }
@@ -178,10 +190,11 @@ class UploadActivity : AppCompatActivity(), RecyclerItemListener {
             lateinit var storageReference: StorageReference
             if(!list.isEmpty()){
                 while(i < list.size){
-                    storageReference = mFirebaseStorage.child(userModel.email).child(generatedKey).child("${list[i].fileName}-${System.currentTimeMillis()}")
+                    val millis = System.currentTimeMillis().toString()
+                    storageReference = mFirebaseStorage.child(userModel.email).child(generatedKey).child(millis+"_${list[i].fileName}")
                     val bitmap : Bitmap = MediaStore.Images.Media.getBitmap(contentResolver, list[i].filePath)
                     val byteArrayOutputStream = ByteArrayOutputStream()
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream)
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 30, byteArrayOutputStream)
                     val data = byteArrayOutputStream.toByteArray()
                     mStorageTask = storageReference.putBytes(data).addOnSuccessListener { taskSnapshot ->
                         val imageUrl = ImageModel(taskSnapshot.downloadUrl.toString())

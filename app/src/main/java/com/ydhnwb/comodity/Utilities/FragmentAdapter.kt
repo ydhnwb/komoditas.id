@@ -3,6 +3,7 @@ package com.ydhnwb.comodity.Utilities
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import com.ydhnwb.comodity.Fragment.FragmentBarang
 
 class FragmentAdapter(fm : FragmentManager) : FragmentPagerAdapter(fm){
 
@@ -25,6 +26,10 @@ class FragmentAdapter(fm : FragmentManager) : FragmentPagerAdapter(fm){
     fun addFragment(fragment: Fragment, title: String){
         listFragment.add(fragment)
         listTitles.add(title)
+    }
+
+    fun getFragmentSize() : Int{
+        return listFragment.size
     }
 
 

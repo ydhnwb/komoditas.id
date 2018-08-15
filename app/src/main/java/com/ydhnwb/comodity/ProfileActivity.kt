@@ -117,7 +117,8 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun getData(){
-        val fo = FirebaseRecyclerOptions.Builder<IndividualPostModel>().setQuery(sDatabaseReference.child(mAuth.currentUser!!.uid), IndividualPostModel::class.java)
+        val fo = FirebaseRecyclerOptions.Builder<IndividualPostModel>()
+                .setQuery(sDatabaseReference.child(mAuth.currentUser!!.uid), IndividualPostModel::class.java)
                 .build()
 
         firebaseRecyclerAdapter = object : FirebaseRecyclerAdapter<IndividualPostModel, SingleListMainViewHolder>(fo){
@@ -137,7 +138,7 @@ class ProfileActivity : AppCompatActivity() {
                         if(p0 != null && p0.exists()){
                             val p = p0.getValue(PostModel::class.java)
                             if (p != null) {
-                                holder.harga.text = "Rp. ${p.harga}"
+                                holder.harga.text = "Rp.${p.harga}"
                                 holder.nama_barang.text = p.nama_barang
                                 val uDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.USERS).child(p.uid)
                                 uDatabaseReference.keepSynced(true)
@@ -150,48 +151,41 @@ class ProfileActivity : AppCompatActivity() {
                                                 Glide.with(applicationContext).load(u.url_photo)
                                                         .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                                                         .into(holder.profilePicture)
-                                                holder.displayName.text = " - " + u.display_name
+                                                holder.displayName.text = u.display_name
                                             }
                                         }
                                     }
 
                                 })
-                                val ref2 : DatabaseReference = p0.ref.child("foto")
-                                ref2.keepSynced(true)
-                                ref2.addValueEventListener(object : ValueEventListener{
-                                    override fun onCancelled(p0: DatabaseError?) {}
-                                    override fun onDataChange(p0: DataSnapshot?) {
-                                        if(p0 != null && p0.exists()){
-                                            listOfPhotos.clear()
-                                            for (ds in p0.children){
-                                                val im = ds.getValue(ImageModel::class.java)
-                                                if (im != null) {
-                                                    listOfPhotos.add(im)
-                                                }
+                                //==============
+                                val gDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.POST).child(p0.key)
+                                gDatabaseReference.child("foto").orderByKey().limitToFirst(1).addValueEventListener(object : ValueEventListener{
+                                    override fun onCancelled(p0s: DatabaseError?) {}
+                                    override fun onDataChange(p0s: DataSnapshot?) {
+                                        if(p0s != null && p0s.exists()){
+                                            var key = ""
+                                            for (child in p0s.children) {
+                                                key = child.key
                                             }
-                                            try{
-                                                var i = 0
-                                                while (listOfPhotos[i].photosUrl == null && i < listOfPhotos.size){
-                                                    i++
+                                            gDatabaseReference.child("foto").child(key).addValueEventListener(object : ValueEventListener{
+                                                override fun onCancelled(p0sx: DatabaseError?) {}
+                                                override fun onDataChange(p0sx: DataSnapshot?) {
+                                                    if(p0sx != null && p0sx.exists() ){
+                                                        val im = p0sx.getValue(ImageModel::class.java)
+                                                        if (im != null) {
+                                                            Glide.with(applicationContext).load(im.photosUrl.toString()).apply(RequestOptions().placeholder(R.drawable.placeholder)).into(holder.preview_image)
+                                                        }else{
+                                                            Glide.with(applicationContext).load(R.drawable.no_image).into(holder.preview_image)
+                                                        }
+                                                    }
                                                 }
-                                                if(listOfPhotos[i].photosUrl != null){
-                                                    Glide.with(this@ProfileActivity).load(listOfPhotos[i].photosUrl)
-                                                            .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.placeholder))
-                                                            .into(holder.preview_image)
-                                                }else{
-                                                    Glide.with(this@ProfileActivity).load(R.drawable.no_image)
-                                                            .into(holder.preview_image)
-                                                }
-                                            }catch (e:Exception){
-                                                println("Preview Image Exception : " + e.message)
-                                            }
+                                            })
                                         }else{
-                                            Glide.with(this@ProfileActivity).load(R.drawable.no_image)
-                                                    .into(holder.preview_image)
-
+                                            Glide.with(this@ProfileActivity).load(R.drawable.no_image).into(holder.preview_image)
                                         }
                                     }
                                 })
+                                //===============
                                 holder.decideLikes(mainDatabaseReference.key)
                                 holder.likeButton.setOnLikeListener(object : OnLikeListener {
                                     override fun liked(p0: LikeButton?) {

@@ -8,23 +8,25 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.ydhnwb.comodity.Interfaces.MyClickListener
+import com.ydhnwb.comodity.Model.ChatModel
 import com.ydhnwb.comodity.Model.ListOfChatModel
 import com.ydhnwb.comodity.Model.UserModel
 import com.ydhnwb.comodity.Utilities.Constant
 import com.ydhnwb.comodity.ViewHolder.ListOfChatViewHolder
 import kotlinx.android.synthetic.main.activity_list_chat.*
 import kotlinx.android.synthetic.main.filler_list_chat.*
+import com.google.firebase.database.DataSnapshot
+import com.ydhnwb.comodity.FirebaseMethods.AnotherMethods
+
 
 class ListChatActivity : AppCompatActivity() {
 
@@ -99,6 +101,33 @@ class ListChatActivity : AppCompatActivity() {
                         }
                     }
                 })
+
+                val cDatabaseReference = getRef(position).child("chat")
+                        cDatabaseReference.orderByKey().limitToLast(1).addValueEventListener(object : ValueEventListener{
+                            override fun onCancelled(p0: DatabaseError?) {}
+                            override fun onDataChange(p0: DataSnapshot?) {
+                                if (p0 != null) {
+                                    var key = ""
+                                    for (child in p0.getChildren()) {
+                                        key = child.key
+                                    }
+                                    cDatabaseReference.child(key).addValueEventListener(object : ValueEventListener{
+                                        override fun onCancelled(p0s: DatabaseError?) {}
+                                        override fun onDataChange(p0s: DataSnapshot?) {
+                                            if(p0s != null && p0s.exists() ){
+                                                val lastmessage = p0s.child("message").getValue().toString()
+                                                    holder.lastMessage.text = lastmessage
+                                                val lastdate : Long = p0s.child("tanggal_post").getValue() as Long
+                                                holder.lastDate.text = AnotherMethods.getTimeDate(lastdate)
+                                            }
+                                        }
+
+                                    })
+                                    }
+                                }
+
+
+                        })
 
                 holder.setOnItemClickListener(object : MyClickListener{
                     override fun onClick(v: View, position: Int, isLongClick: Boolean) {

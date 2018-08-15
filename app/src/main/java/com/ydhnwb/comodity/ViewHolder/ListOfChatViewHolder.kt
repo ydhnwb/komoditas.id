@@ -19,8 +19,11 @@ class ListOfChatViewHolder(itemView : View, context : Context): RecyclerView.Vie
     var displayname : TextView
     var onShortClickListener : MyClickListener? = null
     var onLongClickListener : MyClickListener? = null
-
+    var lastMessage : TextView
+    var lastDate : TextView
     init {
+        lastDate = itemView.findViewById(R.id.list_of_chat_last_date)
+        lastMessage = itemView.findViewById(R.id.list_of_chat_lastt_message)
         profilePicture = itemView.findViewById(R.id.list_of_chat_picture_profile)
         displayname = itemView.findViewById(R.id.list_of_chat_display_name)
         itemView.setOnClickListener(this)

@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
-        android:id="@+id/rel_Top_Chat"
+    <com.shrikanthravi.chatview.widget.ChatView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        app:showSenderLayout="false"
+        app:leftBubbleLayoutColor="@color/colorGrey"
+        app:rightBubbleLayoutColor="@color/colorPrimary"
+        app:leftBubbleTextColor="@color/materialBlack"
+        app:rightBubbleTextColor="@color/colorWhite"
+        app:showSenderName="false"
+        app:textSize="8sp"
+        android:layout_marginBottom="56dp"
+        app:showLeftBubbleIcon="false"
+        app:showRightBubbleIcon="false"
+        app:timeTextColor="@color/colorGrey"
+        android:id="@+id/chatView">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/chat_recycle"
-            android:nestedScrollingEnabled="false"
-            android:layout_marginBottom="56dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </android.support.v7.widget.RecyclerView>
+    </com.shrikanthravi.chatview.widget.ChatView>
 
-
-    </RelativeLayout>
-
-</ScrollView>
+</RelativeLayout>

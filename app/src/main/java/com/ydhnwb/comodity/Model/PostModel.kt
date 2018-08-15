@@ -3,24 +3,12 @@ package com.ydhnwb.comodity.Model
 /**
  * Created by Prieyuda Akadita S on 19/05/2018.
  */
-class PostModel {
-    lateinit var uid : String
-    var tanggal_post : Long? = null
-    var favorite : Int? = null
-    lateinit var caption :String
-    lateinit var harga : String
-    lateinit var nama_barang : String
-    lateinit var tipe_barang : String
+data class PostModel(val uid : String, val tanggal_post : Long, val favorite: Int, val caption: String,
+                     val harga: String, val nama_barang: String, val nama_barang_idiomatic : String,
+                     val tipe_barang: String, var tipe_nama : String) {
 
-    constructor(){}
+    constructor() : this("",0,0,"","0","",
+            "", "", "")
 
-    constructor(uid: String, tanggal_post: Long, caption: String, harga : String, nama_barang : String, tipe_barang : String, favorite : Int){
-        this.uid = uid
-        this.tanggal_post = tanggal_post
-        this.caption = caption
-        this.harga = harga
-        this.favorite = favorite
-        this.nama_barang = nama_barang
-        this.tipe_barang = tipe_barang
-    }
+
 }

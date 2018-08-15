@@ -16,16 +16,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.*
 import com.google.firebase.database.FirebaseDatabase
 import com.ydhnwb.comodity.IntroAct.SliderActivity
 import com.ydhnwb.comodity.Model.UserModel
 import com.ydhnwb.comodity.Utilities.Constant
 import com.ydhnwb.comodity.Utilities.Constant.Companion.RC_SIGN_IN
 import kotlinx.android.synthetic.main.activity_login.*
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -49,10 +47,11 @@ class LoginActivity : AppCompatActivity() {
             //return
         }
 
-        close_login.setOnClickListener({
+        close_login.setOnClickListener {
             finish()
-        })
+        }
     }
+    
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

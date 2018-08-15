@@ -25,5 +25,17 @@ class Constant {
         const val NONAKTIFKAN_PERTAMA_KALI = "NONAKTIFKAN_PERTAMA"
         const val REQUEST_CODE = 3
 
+
+        //activity code
+        const val BENIH = 1
+        const val BENIH_REF = "BENIH"
+        const val PADI = 2
+        const val PADI_REF = "PANEN"
+        const val PUPUK = 3
+        const val PUPUK_REF = "PUPUK"
+        const val TERNAK = 4
+        const val TERNAK_REF ="TERNAK"
+
+
     }
 }

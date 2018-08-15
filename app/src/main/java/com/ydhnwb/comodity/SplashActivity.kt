@@ -6,8 +6,12 @@ import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
 import android.view.WindowManager
 import com.ydhnwb.comodity.Utilities.NetworkManager
+import android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+
+
 
 class SplashActivity : AppCompatActivity() {
 
@@ -25,7 +29,7 @@ class SplashActivity : AppCompatActivity() {
         if(NetworkManager.isConnected(this@SplashActivity)){
             waitHandler.postDelayed(waitCallback,1000)
         }else if(!NetworkManager.isConnected(this@SplashActivity)){
-            waitHandler.postDelayed(waitCallback, 2000)
+            waitHandler.postDelayed(waitCallback, 3000)
         }
     }
 
@@ -34,7 +38,7 @@ class SplashActivity : AppCompatActivity() {
             val w = window
             w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            w.statusBarColor = this.getDarkColor(Color.WHITE,0.5)
+            w.statusBarColor = this.getDarkColor(Color.WHITE,1.0)
         }
     }
 
@@ -45,8 +49,20 @@ class SplashActivity : AppCompatActivity() {
         return Color.rgb((r*value).toInt(), (g*value).toInt(), (b*value).toInt())
     }
 
+    private fun setLightStatusbar() {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        val decorView = getWindow().getDecorView()
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+      }
+    }
+
     override fun onDestroy() {
         waitHandler.removeCallbacks(waitCallback)
         super.onDestroy()
+    }
+
+    override fun onStart() {
+        setLightStatusbar()
+        super.onStart()
     }
 }

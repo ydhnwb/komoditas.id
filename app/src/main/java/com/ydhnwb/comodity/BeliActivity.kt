@@ -2,7 +2,6 @@ package com.ydhnwb.comodity
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -10,7 +9,6 @@ import com.google.firebase.database.*
 import com.ydhnwb.comodity.Model.PostModel
 import com.ydhnwb.comodity.Model.UserModel
 import com.ydhnwb.comodity.Utilities.Constant
-
 import kotlinx.android.synthetic.main.activity_beli.*
 import kotlinx.android.synthetic.main.content_beli.*
 
@@ -27,22 +25,15 @@ class BeliActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         initAuth()
         toolbar.setNavigationIcon(R.drawable.ic_action_back)
-        toolbar.setNavigationOnClickListener({
-            var builder : AlertDialog.Builder = AlertDialog.Builder(this@BeliActivity)
+        toolbar.setNavigationOnClickListener {
+            val builder : AlertDialog.Builder = AlertDialog.Builder(this@BeliActivity)
             builder.setMessage(R.string.batalkan_transaksi).setCancelable(false)
-                    .setPositiveButton(R.string.yakin, object : DialogInterface.OnClickListener{
-                        override fun onClick(dialog: DialogInterface?, which: Int) {
-                            finish()
-                        }
-                    }).setNegativeButton(R.string.tetap_disini, object : DialogInterface.OnClickListener{
-                        override fun onClick(dialog: DialogInterface?, which: Int) {
-                            dialog?.cancel()
-                        }
-                    })
+                    .setPositiveButton(R.string.yakin) { dialog, _ -> finish() }.setNegativeButton(R.string.tetap_disini
+                    ) { dialog, _ -> dialog?.cancel() }
 
-            var alertDialog = builder.create()
+            val alertDialog = builder.create()
             alertDialog.show()
-        })
+        }
         getPackage()
     }
 
@@ -59,8 +50,7 @@ class BeliActivity : AppCompatActivity() {
     }
 
     private fun getKeyPost() : String{
-        val keyPost = intent.getStringExtra("KEYPOST") ?: throw IllegalArgumentException("Keypost is null") as Throwable
-        return keyPost
+        return intent.getStringExtra("KEYPOST") ?: throw IllegalArgumentException("Keypost is null") as Throwable
     }
 
     private fun getPackage(){
@@ -81,18 +71,13 @@ class BeliActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         //super.onBackPressed()
-        var builder : AlertDialog.Builder = AlertDialog.Builder(this@BeliActivity)
+        val builder : AlertDialog.Builder = AlertDialog.Builder(this@BeliActivity)
         builder.setMessage(R.string.batalkan_transaksi).setCancelable(false)
-                .setPositiveButton(R.string.yakin, object : DialogInterface.OnClickListener{
-                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                        finish()
-                    }
-                }).setNegativeButton(R.string.tetap_disini, object : DialogInterface.OnClickListener{
-                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                        dialog?.cancel()
-                    }
-                })
-        var alertDialog = builder.create()
+                .setPositiveButton(R.string.yakin) {
+                    dialog, _ -> finish() }
+                .setNegativeButton(R.string.tetap_disini) {
+                    dialog, _ -> dialog?.cancel() }
+        val alertDialog = builder.create()
         alertDialog.show()
     }
 }

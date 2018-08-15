@@ -1,17 +1,12 @@
 package com.ydhnwb.comodity.Model
 
+import com.stfalcon.chatkit.commons.models.IMessage
+
 /**
  * Created by Prieyuda Akadita S on 29/05/2018.
  */
-class ChatModel {
-    lateinit var message : String
-    lateinit var uid : String
-    lateinit var tanggal_post : MutableMap<String, String>
+data class ChatModel (var message: String, var uid: String, var tanggal_post: MutableMap<String, String>) {
 
-    constructor(){}
-    constructor(message : String, uid : String, tanggal_post : MutableMap<String, String>){
-        this.message = message
-        this.uid = uid
-        this.tanggal_post = tanggal_post
-    }
+    constructor() : this("","", mutableMapOf<String, String>())
+
 }

@@ -23,12 +23,63 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <ImageView
-                        android:scaleType="center"
+                        android:scaleType="centerCrop"
                         android:id="@+id/preview_image"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/image_preview_on_post" />
+                        android:layout_height="match_parent"/>
 
+                    </RelativeLayout>
+                <LinearLayout
+                    android:layout_alignParentBottom="true"
+                    android:background="#9b000000"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </LinearLayout>
+                    <RelativeLayout
+                        android:layout_alignParentBottom="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="50dp"
+                            android:id="@+id/user_profile_on_list"
+                            android:layout_margin="16dp"
+                            android:layout_height="50dp"/>
+                        <LinearLayout
+                            android:layout_toRightOf="@id/user_profile_on_list"
+                            android:layout_marginTop="16dp"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/nama_barang_on_list"
+                                android:layout_marginBottom="4dp"
+                                android:textSize="16sp"
+                                android:fontFamily="sans-serif-condensed"
+                                android:textStyle="bold"
+                                android:textColor="@color/colorWhite"
+                                android:text=""
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:maxLines="1"/>
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:maxLines="1"
+                                    android:id="@+id/user_name_on_list"
+                                    android:fontFamily="sans-serif-condensed"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="14sp"
+                                    android:text=""
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
                     <LinearLayout
                         android:gravity="end"
                         android:orientation="horizontal"
@@ -49,7 +100,7 @@
                             app:dots_primary_color="#e45598"
                             app:circle_start_color="#e45597"
                             app:like_drawable="@drawable/ic_action_loved"
-                            app:unlike_drawable="@drawable/ic_action_love"
+                            app:unlike_drawable="@drawable/ic_action_love_white"
                             app:dots_secondary_color="@color/colorWhite"
                             android:layout_margin="4dp"
                             app:icon_type="heart"
@@ -59,51 +110,8 @@
                         </com.like.LikeButton>
 
                     </LinearLayout>
-                    </RelativeLayout>
-                <LinearLayout
-                    android:background="#9b000000"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:layout_width="50dp"
-                        android:id="@+id/user_profile_on_list"
-                        android:layout_margin="16dp"
-                        android:layout_height="50dp"/>
-                    <LinearLayout
-                        android:layout_marginTop="16dp"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:id="@+id/nama_barang_on_list"
-                            android:layout_marginBottom="4dp"
-                            android:textSize="16sp"
-                            android:fontFamily="sans-serif-condensed"
-                            android:textStyle="bold"
-                            android:textColor="@color/colorWhite"
-                            android:text=""
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"/>
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <TextView
-                                android:maxLines="1"
-                                android:id="@+id/user_name_on_list"
-                                android:fontFamily="sans-serif-condensed"
-                                android:textStyle="bold"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="14sp"
-                                android:text=""
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-            </RelativeLayout>
+
+                </RelativeLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

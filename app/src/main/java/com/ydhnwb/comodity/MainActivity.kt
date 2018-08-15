@@ -28,11 +28,15 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.welcome_card.*
 import com.google.firebase.database.DataSnapshot
 import android.support.v7.widget.SimpleItemAnimator
+import android.widget.Toast
+import com.arlib.floatingsearchview.FloatingSearchView
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion
 import com.danimahardhika.cafebar.CafeBar
 import com.danimahardhika.cafebar.CafeBarTheme
 import com.like.LikeButton
 import com.like.OnLikeListener
 import com.ydhnwb.comodity.FirebaseMethods.AnotherMethods
+import com.ydhnwb.comodity.R.drawable.placeholder
 import com.ydhnwb.comodity.Utilities.NetworkManager
 
 class MainActivity : AppCompatActivity() {
@@ -61,9 +65,51 @@ class MainActivity : AppCompatActivity() {
         }
         cardAction()
         getData()
+        onSearchPressed()
     }
 
+    private fun onSearchPressed(){
+        search_onSA.setOnSearchListener(object : FloatingSearchView.OnSearchListener{
+            override fun onSearchAction(currentQuery: String?) {
+                if(currentQuery.toString().trim() != ""){
+                    val i = Intent(this@MainActivity, CariActivity::class.java)
+                    i.putExtra("QUERY_SEARCH", currentQuery)
+                    i.putExtra("FROM_ACTIVITY", 0)
+                    startActivity(i)
+                    search_onSA.clearQuery()
+                }
+            }
+            override fun onSuggestionClicked(searchSuggestion: SearchSuggestion?) {}
+        })
+    }
 
+    private fun cardAction(){
+        main_to_profil.setOnClickListener { startActivity(Intent(this@MainActivity, ProfileActivity::class.java)) }
+        main_to_bibit.setOnClickListener {
+            val i = Intent(this@MainActivity,CariActivity::class.java)
+            i.putExtra("QUERY_SEARCH", "")
+            i.putExtra("FROM_ACTIVITY", Constant.BENIH)
+            startActivity(i)
+        }
+        main_to_padi.setOnClickListener {
+            val i = Intent(this@MainActivity,CariActivity::class.java)
+            i.putExtra("QUERY_SEARCH", "")
+            i.putExtra("FROM_ACTIVITY", Constant.PADI)
+            startActivity(i)
+        }
+        main_to_pupuk.setOnClickListener {
+            val i = Intent(this@MainActivity,CariActivity::class.java)
+            i.putExtra("QUERY_SEARCH", "")
+            i.putExtra("FROM_ACTIVITY", Constant.PUPUK)
+            startActivity(i)
+        }
+        main_to_ternak.setOnClickListener {
+            val i = Intent(this@MainActivity,CariActivity::class.java)
+            i.putExtra("QUERY_SEARCH", "")
+            i.putExtra("FROM_ACTIVITY", Constant.TERNAK)
+            startActivity(i)
+        }
+    }
 
     override fun onStop() {
         mAuth.removeAuthStateListener(mAuthStateListener)
@@ -75,32 +121,26 @@ class MainActivity : AppCompatActivity() {
         if(checkingBack){
             if(NetworkManager.isConnected(this@MainActivity)){
                 checkingBack = false
-                //Snackbar.make(root_mainActivityLayout, "Koneksi telah kembali", Snackbar.LENGTH_LONG).show()
                 CafeBar.builder(this@MainActivity).content("Koneksi internet telah pulih")
                         .theme(CafeBarTheme.LIGHT)
                         .contentTypeface("OpenSans-Regular.ttf").show()
-                        //.contentTypeface(Typeface.createFromAsset(this@MainActivity.getAssets(), "fonts/RobotoMono-Regular.ttf")
-                        //.show();
-
                 }
         }
         super.onStart()
     }
 
-    /*override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        //menuInflater.inflate(R.menu.menu_main, menu)
-        //return true
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        /*return when (item.itemId) {
+        return when (item.itemId) {
             R.id.action_settings ->
                 true
             else -> super.onOptionsItemSelected(item)
-        }*/
-        return false
-    }*/
+        }
+    }
 
     private fun initFirebase(){
         mAuth = FirebaseAuth.getInstance()
@@ -108,8 +148,6 @@ class MainActivity : AppCompatActivity() {
             val firebaseUser = it.currentUser
             if(firebaseUser != null){
                 user = UserModel(firebaseUser.uid,firebaseUser.displayName.toString(),firebaseUser.displayName.toString().toLowerCase(),firebaseUser.email.toString(),firebaseUser.phoneNumber.toString())
-                val ind = FirebaseDatabase.getInstance().getReference(Constant.INDIVIDUAL_POST).child(user.uid)
-                ind.keepSynced(true)
                 setupPermission()
             }else{
                 val intent = Intent(this@MainActivity, LoginActivity::class.java)
@@ -141,18 +179,18 @@ class MainActivity : AppCompatActivity() {
         initFirebase()
         likeDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.LIKES)
         likeDatabaseReference.keepSynced(true)
+
         if(!NetworkManager.isConnected(this@MainActivity)){
             checkingBack = true
-            //Snackbar.make(root_mainActivityLayout, "Tidak ada koneksi internet", Snackbar.LENGTH_LONG).show()
             CafeBar.builder(this@MainActivity).content("Tidak ada koneksi internet")
                     .theme(CafeBarTheme.LIGHT)
                     .contentTypeface("OpenSans-Regular.ttf").show()
-
         }
     }
 
     private fun getData(){
-        val fo = FirebaseRecyclerOptions.Builder<PostModel>().setQuery(mDatabaseReference.orderByChild("tanggal_post"), PostModel::class.java).build()
+        val fo = FirebaseRecyclerOptions.Builder<PostModel>()
+                .setQuery(mDatabaseReference.orderByChild("tanggal_post").limitToLast(25), PostModel::class.java).build()
         firebaseRecyclerAdapter = object : FirebaseRecyclerAdapter<PostModel, SingleListMainViewHolder>(fo){
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleListMainViewHolder {
                 val view = LayoutInflater.from(parent.context)
@@ -162,10 +200,10 @@ class MainActivity : AppCompatActivity() {
 
             override fun onBindViewHolder(holder: SingleListMainViewHolder, position: Int, model: PostModel) {
                 val uid : String = model.uid
-                holder.harga.text = "Rp. ${model.harga}"
+                holder.harga.text = "Rp.${model.harga}"
                 holder.nama_barang.text = model.nama_barang
                 val fDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.USERS)
-                fDatabaseReference.keepSynced(true)
+                //fDatabaseReference.keepSynced(true)
                 fDatabaseReference.child(uid).addValueEventListener(object : ValueEventListener{
                     override fun onCancelled(p0: DatabaseError?) {}
                     override fun onDataChange(p0: DataSnapshot?) {
@@ -173,8 +211,8 @@ class MainActivity : AppCompatActivity() {
                             val u : UserModel? = p0.getValue(UserModel::class.java)
                             if(u != null){
                                 holder.displayName.text = u.display_name
-                                Glide.with(applicationContext).load(u.url_photo)
-                                        .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                                Glide.with(this@MainActivity)
+                                        .load(u.url_photo).apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC))
                                         .into(holder.profilePicture)
                             }
                         }
@@ -188,45 +226,38 @@ class MainActivity : AppCompatActivity() {
                     }
                 })
 
-                val gDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.POST).child(getRef(position).key)
-                gDatabaseReference.keepSynced(true)
-                gDatabaseReference.child("foto").addValueEventListener(object : ValueEventListener{
-                    override fun onCancelled(p0: DatabaseError?) { println("Cannot fetch image from the server...") }
-                    override fun onDataChange(p0: DataSnapshot?) {
-                        if(p0 != null && p0.exists()){
-                            listOfPhotos.clear()
-                            for(ds in p0.children){
-                                val im = ds.getValue(ImageModel::class.java)
-                                listOfPhotos.add(im!!)
+                val gDatabaseReference = getRef(position)
+                gDatabaseReference.child("foto").orderByKey().limitToLast(1).addValueEventListener(object : ValueEventListener{
+                    override fun onCancelled(p0s: DatabaseError?) {}
+                    override fun onDataChange(p0s: DataSnapshot?) {
+                        if(p0s != null && p0s.exists()){
+                            var key = ""
+                            for (child in p0s.children) {
+                                key = child.key
                             }
-                            try{
-                                var i = 0
-                                while (listOfPhotos[i].photosUrl == null && i < listOfPhotos.size){
-                                    i++
+                            gDatabaseReference.child("foto").child(key).addValueEventListener(object : ValueEventListener{
+                                override fun onCancelled(p0sx: DatabaseError?) {}
+                                override fun onDataChange(p0sx: DataSnapshot?) {
+                                    if(p0sx != null && p0sx.exists() ){
+                                        val im = p0sx.getValue(ImageModel::class.java)
+                                        if (im != null) {
+                                            Glide.with(applicationContext)
+                                                    .load(im.photosUrl.toString())
+                                                    .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                                            .placeholder(R.drawable.placeholder)).into(holder.preview_image)
+                                        }else{
+                                            Glide.with(applicationContext).load(R.drawable.no_image).into(holder.preview_image)
+                                        }
+                                    }
                                 }
-                                if(listOfPhotos[i].photosUrl != null){
-                                    Glide.with(this@MainActivity).load(listOfPhotos[i].photosUrl)
-                                            .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.placeholder))
-                                            .into(holder.preview_image)
-                                }else{
-                                    //todo acceptable bug tidak muncul placeholdernya
-                                    Glide.with(this@MainActivity).load(R.drawable.placeholder)
-                                            .into(holder.preview_image)
-                                }
-                            }catch (e:Exception){
-                                Glide.with(this@MainActivity).load(R.drawable.no_image)
-                                        .into(holder.preview_image)
-                                println("Preview Image Exception : " + e.message)
-                            }
+                            })
                         }else{
-                            Glide.with(this@MainActivity).load(R.drawable.no_image)
-                                    .into(holder.preview_image)
+                            Glide.with(this@MainActivity).load(R.drawable.no_image).into(holder.preview_image)
                         }
                     }
                 })
                 holder.decideLikes(getRef(position).key)
                 holder.likeButton.setOnLikeListener(object : OnLikeListener{
-
                     override fun liked(p0: LikeButton?) {
                         var isProgress = true
                         likeDatabaseReference.addValueEventListener(object : ValueEventListener{
@@ -270,7 +301,6 @@ class MainActivity : AppCompatActivity() {
                         })
                     }
                 })
-                //holder.likeButton.isLiked = false
                 holder.setOnLongItemClickListener(object : MyClickListener{
                     override fun onClick(v: View, position: Int, isLongClick: Boolean) {
                         val tDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.POST).child(getRef(position).key)
@@ -313,11 +343,6 @@ class MainActivity : AppCompatActivity() {
     /*private fun signOut(){
         mAuth.signOut()
     }*/
-
-    private fun cardAction(){
-        main_to_profil.setOnClickListener { startActivity(Intent(this@MainActivity, ProfileActivity::class.java)) }
-        main_to_bibit.setOnClickListener { startActivity(Intent(this@MainActivity, CariActivity::class.java)) }
-    }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when(requestCode){

@@ -27,7 +27,7 @@
                 android:layout_centerVertical="true"
                 app:floatingSearch_searchSuggestionTextSize="0dp"
                 app:floatingSearch_dimBackground="false"
-                app:floatingSearch_showSearchKey="false"
+                app:floatingSearch_showSearchKey="true"
                 app:floatingSearch_searchHint="Cari di Komoditas.id"
                 app:floatingSearch_leftActionMode="showHome"
                 android:layout_width="match_parent"
