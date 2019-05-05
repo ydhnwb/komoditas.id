@@ -6,7 +6,7 @@
     android:layout_height="200dp">
     <android.support.v7.widget.CardView
         android:layout_margin="4dp"
-        app:cardElevation="2dp"
+        app:cardElevation="1dp"
         app:cardCornerRadius="8dp"
         android:background="?android:attr/selectableItemBackground"
         android:layout_width="match_parent"
@@ -41,14 +41,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:layout_width="50dp"
-                            android:id="@+id/user_profile_on_list"
-                            android:layout_margin="16dp"
-                            android:layout_height="50dp"/>
                         <LinearLayout
-                            android:layout_toRightOf="@id/user_profile_on_list"
-                            android:layout_marginTop="16dp"
+                            android:padding="16dp"
                             android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -56,10 +50,9 @@
                                 android:id="@+id/nama_barang_on_list"
                                 android:layout_marginBottom="4dp"
                                 android:textSize="16sp"
-                                android:fontFamily="sans-serif-condensed"
                                 android:textStyle="bold"
                                 android:textColor="@color/colorWhite"
-                                android:text=""
+                                android:text="Lorem ipsum dolor sit amet"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:maxLines="1"/>
@@ -70,11 +63,9 @@
                                 <TextView
                                     android:maxLines="1"
                                     android:id="@+id/user_name_on_list"
-                                    android:fontFamily="sans-serif-condensed"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/colorPrimary"
+                                    android:textColor="#e0e0e0"
                                     android:textSize="14sp"
-                                    android:text=""
+                                    android:text="Prieyudha Akadita S"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                             </LinearLayout>

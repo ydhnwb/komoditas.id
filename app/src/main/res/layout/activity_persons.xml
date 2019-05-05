@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    tools:context=".PersonsActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?android:attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar">
+
+            <LinearLayout
+                android:layout_marginTop="25dp"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="68dp"
+                    android:layout_height="68dp"
+                    app:civ_border_width="2dp"
+                    app:civ_border_color="#fff"
+                    android:id="@+id/person_photo_profile"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:id="@+id/person_display_name"
+                    android:layout_gravity="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorWhite"
+                    android:layout_marginTop="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <mehdi.sakout.fancybuttons.FancyButton
+                        android:id="@+id/person_kirim_pesan"
+                        fancy:fb_text="KIRIM PESAN"
+                        fancy:fb_borderColor="#FFFFFF"
+                        fancy:fb_borderWidth="1dp"
+                        fancy:fb_radius="30dp"
+                        fancy:fb_textSize="13sp"
+                        fancy:fb_defaultColor="#00000000"
+                        fancy:fb_textColor="#FFFFFF"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                    </mehdi.sakout.fancybuttons.FancyButton>
+
+                    <mehdi.sakout.fancybuttons.FancyButton
+                        android:layout_marginStart="8dp"
+                        android:id="@+id/person_berlangganan"
+                        fancy:fb_text="BERLANGGANAN"
+                        fancy:fb_borderColor="#FFFFFF"
+                        fancy:fb_borderWidth="1dp"
+                        fancy:fb_radius="30dp"
+                        fancy:fb_textSize="13sp"
+                        fancy:fb_defaultColor="#00000000"
+                        fancy:fb_textColor="#FFFFFF"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                    </mehdi.sakout.fancybuttons.FancyButton>
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                android:layout_gravity="top"
+                android:layout_marginBottom="48dp"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            </android.support.v7.widget.Toolbar>
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabs"
+                app:tabMode="scrollable"
+                android:background="@color/colorWhite"
+                app:tabGravity="fill"
+                android:layout_gravity="bottom"
+                app:tabSelectedTextColor="#000"
+                app:tabTextColor="#bdbdbd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.design.widget.TabLayout>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+
+
+    <include layout="@layout/content_persons"/>
+
+
+</android.support.design.widget.CoordinatorLayout>

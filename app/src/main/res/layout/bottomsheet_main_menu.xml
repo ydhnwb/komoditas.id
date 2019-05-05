@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:id="@+id/bangsatkau"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_marginTop="4dp"
+            android:id="@+id/drag_handle"
+            android:background="@drawable/rounded_rectangle_me"
+            android:layout_centerHorizontal="true"
+            android:layout_width="38dp"
+            android:layout_height="6dp">
+        </RelativeLayout>
+        <LinearLayout
+            android:background="?android:selectableItemBackground"
+            android:layout_below="@id/drag_handle"
+            android:id="@+id/info_saya"
+            android:padding="16dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="44dp"
+                android:padding="2dp"
+                android:id="@+id/bottom_sheet_profile_pic"
+                android:layout_height="44dp"
+                app:civ_border_color="@color/materialBlack"
+                app:civ_border_width="2dp"/>
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:layout_marginStart="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:fontFamily="monospace"
+                    android:maxLines="1"
+                    android:id="@+id/bottom_sheet_display_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/materialBlack"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/bottom_sheet_email"
+                    android:fontFamily="monospace"
+                    android:text=""
+                    android:maxLines="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:id="@+id/divider_bottom_sheet"
+            android:layout_below="@id/info_saya"
+            android:background="@color/colorGrey"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+        <LinearLayout
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:layout_below="@id/divider_bottom_sheet"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:background="?android:selectableItemBackground"
+                android:clickable="true"
+                android:id="@+id/bottomsheet_myfav"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:padding="2dp"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_action_my_fav"/>
+                <TextView
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="monospace"
+                    android:textSize="14sp"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/materialBlack"
+                    android:textStyle="bold"
+                    android:text="Favorit saya"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:clickable="true"
+                android:background="?android:selectableItemBackground"
+                android:id="@+id/bottomsheet_mymessage"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:padding="2dp"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_action_message"/>
+                <TextView
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="monospace"
+                    android:textSize="14sp"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/materialBlack"
+                    android:textStyle="bold"
+                    android:text="Pesan langsung"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:clickable="true"
+                android:background="?android:selectableItemBackground"
+                android:id="@+id/bottom_sheet_pengaturan"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:padding="2dp"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_action_settings"/>
+                <TextView
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="monospace"
+                    android:textSize="14sp"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/materialBlack"
+                    android:textStyle="bold"
+                    android:text="Pengaturan"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

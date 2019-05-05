@@ -48,16 +48,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
         </com.google.android.gms.common.SignInButton>
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_marginTop="32dp"
-            android:layout_below="@id/google_sign_in"
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:lottie_rawRes="@raw/semangka"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"/>
-
         <TextView
             android:padding="16dp"
             android:layout_alignParentBottom="true"

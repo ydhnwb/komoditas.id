@@ -4,22 +4,14 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.shrikanthravi.chatview.widget.ChatView
+    <android.support.v7.widget.RecyclerView
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:layout_marginBottom="54dp"
+        android:id="@+id/messageListChat"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:showSenderLayout="false"
-        app:leftBubbleLayoutColor="@color/colorGrey"
-        app:rightBubbleLayoutColor="@color/colorPrimary"
-        app:leftBubbleTextColor="@color/materialBlack"
-        app:rightBubbleTextColor="@color/colorWhite"
-        app:showSenderName="false"
-        app:textSize="8sp"
-        android:layout_marginBottom="56dp"
-        app:showLeftBubbleIcon="false"
-        app:showRightBubbleIcon="false"
-        app:timeTextColor="@color/colorGrey"
-        android:id="@+id/chatView">
+        android:layout_height="match_parent">
 
-    </com.shrikanthravi.chatview.widget.ChatView>
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

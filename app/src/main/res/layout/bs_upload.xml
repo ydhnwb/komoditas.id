@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet_main"
+    android:clickable="true"
+    android:elevation="16dp"
+    android:background="#FFF"
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    app:behavior_peekHeight="0dp"
+    app:behavior_hideable="true">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/click_bs"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="match_parent"
+            android:layout_height="55dp">
+            <TextView
+                android:id="@+id/helper_text"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_centerInParent="true"
+                android:text="Swipe up to open"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <include layout="@layout/filler_upload"/>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

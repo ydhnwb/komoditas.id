@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
+        android:elevation="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:padding="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:scaleType="centerCrop"
+                    android:id="@+id/preview_image_on_person"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+                <com.like.LikeButton
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/like_on_person"
+                    app:dots_primary_color="#e45598"
+                    app:circle_start_color="#e45597"
+                    app:like_drawable="@drawable/ic_action_loved"
+                    app:unlike_drawable="@drawable/ic_action_love_white"
+                    app:dots_secondary_color="@color/colorWhite"
+                    android:layout_margin="4dp"
+                    app:icon_type="heart"
+                    app:icon_size="32dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp">
+
+                </com.like.LikeButton>
+            </RelativeLayout>
+            <TextView
+                android:id="@+id/nama_barang_on_person"
+                android:padding="8dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/materialBlack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"/>
+            <TextView
+                android:id="@+id/harga_on_person"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:text=""
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

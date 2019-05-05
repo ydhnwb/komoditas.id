@@ -14,19 +14,22 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
         <RelativeLayout
+            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="68dp">
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
-                android:background="?android:attr/colorPrimary"
+                android:background="@color/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
             </android.support.v7.widget.Toolbar>
+
             <com.arlib.floatingsearchview.FloatingSearchView
                 android:id="@+id/search_onSA"
                 android:padding="8dp"
+                android:background="@color/colorPrimary"
                 android:layout_centerVertical="true"
                 app:floatingSearch_searchSuggestionTextSize="0dp"
                 app:floatingSearch_dimBackground="false"
@@ -35,6 +38,7 @@
                 app:floatingSearch_leftActionMode="noLeftAction"
                 app:floatingSearch_menu="@menu/menu_main"
                 android:layout_width="match_parent"
+                android:elevation="1dp"
                 app:floatingSearch_close_search_on_keyboard_dismiss="true"
                 android:layout_height="wrap_content">
             </com.arlib.floatingsearchview.FloatingSearchView>
@@ -60,13 +64,7 @@
 
     </mehdi.sakout.fancybuttons.FancyButton>
 
-    <!-- <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_action_create_orange" />
-        -->
+
+    <include layout="@layout/bs_upload"/>
 
 </android.support.design.widget.CoordinatorLayout>

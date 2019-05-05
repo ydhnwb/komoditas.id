@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="8dp">
+
+    <RelativeLayout
+        android:layout_marginStart="58dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/rounded_rectangle_me"
+            android:id="@+id/relative_chat_me"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/image_in_chat_bubble_me"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:maxHeight="200dp"
+                android:maxWidth="200dp"/>
+            <TextView
+                android:layout_below="@id/image_in_chat_bubble_me"
+                android:id="@+id/item_message_sent_message_body"
+                android:textColor="#515151"
+                android:textSize="14sp"
+                android:text=""
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/relative_chat_me"
+            android:id="@+id/item_message_sent_tanggal_post"
+            android:textSize="11sp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </RelativeLayout>
+
+
+</android.support.constraint.ConstraintLayout>

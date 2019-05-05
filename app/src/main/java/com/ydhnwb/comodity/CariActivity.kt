@@ -1,12 +1,8 @@
 package com.ydhnwb.comodity
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.view.WindowManager
 import com.arlib.floatingsearchview.FloatingSearchView
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion
 import com.ydhnwb.comodity.Fragment.FragmentBarang
@@ -29,14 +25,8 @@ class CariActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         getQueryFromHome()
         setSearchPlaceholder(activityBefore())
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
         onSearch()
     }
-
-
 
 
     private fun initFragmentFirst(querySearch : String, activityCode : Int){
@@ -83,12 +73,15 @@ class CariActivity : AppCompatActivity() {
 
     private fun setSearchPlaceholder(activityCode: Int){
         when(activityCode){
-            1 -> { search.setSearchHint("Cari benih terbaik") }
-            2 -> { search.setSearchHint("Cari hasil panen") }
-            3 -> { search.setSearchHint("Cari pupuk") }
-            4 -> { search.setSearchHint("Cari hasil ternak") }
+            1 -> { search.setSearchHint("Cari di Komoditas.id") }
+            2 -> { search.setSearchHint("Cari di Komoditas.id") }
+            3 -> { search.setSearchHint("Cari di Komoditas.id") }
+            4 -> { search.setSearchHint("Cari di Komoditas.id") }
             else -> { search.setSearchHint("Cari di Komoditas.id") }
         }
     }
+
+
+
 
 }

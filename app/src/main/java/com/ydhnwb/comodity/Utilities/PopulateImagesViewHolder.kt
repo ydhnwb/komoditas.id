@@ -9,13 +9,15 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.ydhnwb.comodity.Model.PopulateImageModel
 import com.ydhnwb.comodity.Model.PopulateImagesModel
 import com.ydhnwb.comodity.R
 
 /**
  * Created by Prieyuda Akadita S on 18/05/2018.
  */
-class PopulateImagesViewHolder(var context: Context, var model: MutableList<PopulateImagesModel>) : RecyclerView.Adapter<PopulateImagesViewHolder.MViewHolder>(){
+class PopulateImagesViewHolder(var context: Context, var model: MutableList<PopulateImageModel>)
+    : RecyclerView.Adapter<PopulateImagesViewHolder.MViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MViewHolder {
         val view : View = LayoutInflater.from(parent.context).inflate(R.layout.single_item_populate_image, parent, false)
         return PopulateImagesViewHolder.MViewHolder(view)
@@ -26,7 +28,7 @@ class PopulateImagesViewHolder(var context: Context, var model: MutableList<Popu
     }
 
     override fun onBindViewHolder(holder: MViewHolder, position: Int) {
-        var myModel : PopulateImagesModel = model.get(position)
+        var myModel : PopulateImageModel = model.get(position)
         holder.fileName.text = myModel.fileName
         Glide.with(context).load(myModel.filePath).into(holder.image)
         if(myModel.status.equals(Constant.STATUS)){
@@ -42,7 +44,7 @@ class PopulateImagesViewHolder(var context: Context, var model: MutableList<Popu
         notifyItemRemoved(position)
     }
 
-    fun undoDeleteItem(sModel : PopulateImagesModel, position : Int){
+    fun undoDeleteItem(sModel : PopulateImageModel, position : Int){
         model.add(position, sModel)
         notifyItemInserted(position)
     }

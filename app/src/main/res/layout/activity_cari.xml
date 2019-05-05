@@ -12,18 +12,20 @@
         android:elevation="2dp"
         android:theme="@style/AppTheme.AppBarOverlay">
         <RelativeLayout
+            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="68dp">
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
-                android:background="?android:attr/colorPrimary"
+                android:background="@color/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             <com.arlib.floatingsearchview.FloatingSearchView
                 android:id="@+id/search"
                 android:padding="8dp"
+                android:elevation="1dp"
                 android:layout_centerVertical="true"
                 app:floatingSearch_searchSuggestionTextSize="0dp"
                 app:floatingSearch_dimBackground="false"
@@ -51,13 +53,5 @@
 
 
     <include layout="@layout/content_cari" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
 
 </android.support.design.widget.CoordinatorLayout>

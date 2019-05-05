@@ -13,17 +13,11 @@ import com.like.LikeButton
 import com.ydhnwb.comodity.Interfaces.MyClickListener
 import com.ydhnwb.comodity.R
 import com.ydhnwb.comodity.Utilities.Constant
-import de.hdodenhof.circleimageview.CircleImageView
 import com.google.firebase.auth.FirebaseAuth
 
-
-
-/**
- * Created by Prieyuda Akadita S on 19/05/2018.
- */
 class SingleListMainViewHolder(itemView : View, context : Context ) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
     var preview_image : ImageView
-    var profilePicture : CircleImageView
+    //var profilePicture : CircleImageView
     var displayName : TextView
     var nama_barang : TextView
     var onShortClickListener : MyClickListener? = null
@@ -36,7 +30,7 @@ class SingleListMainViewHolder(itemView : View, context : Context ) : RecyclerVi
     init{
         preview_image = itemView.findViewById(R.id.preview_image)
         nama_barang = itemView.findViewById(R.id.nama_barang_on_list)
-        profilePicture = itemView.findViewById(R.id.user_profile_on_list)
+        //profilePicture = itemView.findViewById(R.id.user_profile_on_list)
         displayName = itemView.findViewById(R.id.user_name_on_list)
         harga = itemView.findViewById(R.id.harga_on_list)
         likeButton = itemView.findViewById(R.id.likeButton)

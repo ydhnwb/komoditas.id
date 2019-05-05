@@ -33,20 +33,22 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
-    private fun changeStatusbarBackground(){
-        if(Build.VERSION.SDK_INT >= 21){
-            val w = window
-            w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            w.statusBarColor = this.getDarkColor(Color.WHITE,1.0)
-        }
-    }
+
 
     private fun getDarkColor(i : Int, value : Double) : Int{
         val r = Color.red(i)
         val g = Color.green(i)
         val b = Color.blue(i)
         return Color.rgb((r*value).toInt(), (g*value).toInt(), (b*value).toInt())
+    }
+
+    private fun changeStatusbarBackground(){
+        if(Build.VERSION.SDK_INT >= 21){
+            val w = window
+            w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            w.statusBarColor = this.getDarkColor(Color.BLACK,1.0)
+        }
     }
 
     private fun setLightStatusbar() {
@@ -62,7 +64,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
-        setLightStatusbar()
+        //setLightStatusbar()
         super.onStart()
     }
 }

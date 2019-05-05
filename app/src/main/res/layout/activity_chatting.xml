@@ -16,9 +16,10 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
+                app:titleTextColor="@color/materialBlack"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
-                android:background="?android:attr/colorPrimary"
+                android:background="@color/colorWhite"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -26,13 +27,15 @@
                 android:layout_centerVertical="true"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                app:civ_border_color="@color/materialBlack"
+                app:civ_border_width="2dp"
                 android:id="@+id/dengan_profile"/>
             <TextView
                 android:layout_marginStart="8dp"
                 android:layout_toRightOf="@id/dengan_profile"
                 android:maxLines="1"
                 android:id="@+id/dengan_siapa"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/materialBlack"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
@@ -43,12 +46,20 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
     <include layout="@layout/content_chatting" />
+
+
     <RelativeLayout
+        android:minHeight="54dp"
+        android:layout_gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/rel_things">
 
         <include layout="@layout/bottom_bar_chat"/>
+
+
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

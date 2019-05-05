@@ -1,9 +1,7 @@
 package com.ydhnwb.comodity
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
@@ -14,7 +12,10 @@ import com.daimajia.slider.library.SliderLayout
 import com.daimajia.slider.library.SliderTypes.BaseSliderView
 import com.daimajia.slider.library.SliderTypes.TextSliderView
 import com.daimajia.slider.library.Tricks.ViewPagerEx
+import com.danimahardhika.cafebar.CafeBar
+import com.danimahardhika.cafebar.CafeBarTheme
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.ydhnwb.comodity.FirebaseMethods.AnotherMethods
 import com.ydhnwb.comodity.Model.ImageModel
@@ -34,9 +35,13 @@ class DetailActivity : AppCompatActivity(), BaseSliderView.OnSliderClickListener
     private lateinit var mAuthStateListener: FirebaseAuth.AuthStateListener
     private lateinit var mDatabaseRefence : DatabaseReference
     private lateinit var mPostModel : PostModel
-    private lateinit var mUserModel : UserModel
+    private var mUserModel : FirebaseUser? = null
     private lateinit var listOfImages : MutableList<ImageModel>
-
+    private lateinit var likeDatabaseReference : DatabaseReference
+    private lateinit var fotoListener : ValueEventListener
+    private lateinit var likeListener : ValueEventListener
+    private lateinit var postListener : ValueEventListener
+    private var isLiked = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,10 +53,6 @@ class DetailActivity : AppCompatActivity(), BaseSliderView.OnSliderClickListener
         }
         listOfImages = ArrayList()
         relative_bottom_detail.visibility = View.GONE
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
         initAuth()
         toolbar_layout.title = " "
         initCollapsingToolbar()
@@ -74,7 +75,7 @@ class DetailActivity : AppCompatActivity(), BaseSliderView.OnSliderClickListener
 
     private fun initCollapsingToolbar(){
         app_bar.addOnOffsetChangedListener { _, verticalOffset ->
-            var isShow = false
+            val isShow = false
             var scrollRange = -1
             if (scrollRange == -1) {
                 scrollRange = app_bar.totalScrollRange
@@ -82,15 +83,12 @@ class DetailActivity : AppCompatActivity(), BaseSliderView.OnSliderClickListener
             when {
                 scrollRange + verticalOffset == 0 -> {
                     toolbar_layout.title = mPostModel.nama_barang
-                    isShow = true;
                 }
                 isShow -> {
                     toolbar_layout.title = " "
-                    isShow = false;
                 }
                 scrollRange + verticalOffset > 0 -> {
                     toolbar_layout.title = " "
-                    isShow = false;
                 }
             }
         }
@@ -98,86 +96,149 @@ class DetailActivity : AppCompatActivity(), BaseSliderView.OnSliderClickListener
 
     private fun initAuth(){
         mAuth = FirebaseAuth.getInstance()
-        mAuthStateListener = FirebaseAuth.AuthStateListener {
-            val user = it.currentUser
-            if(null == user){
-             finish()
-            }else{
-                mUserModel = UserModel(user.uid,user.displayName.toString(),user.displayName.toString().toLowerCase(),user.email.toString(),user.photoUrl.toString())
-                initReference()
-            }
+        mUserModel = mAuth.currentUser
+        if(mUserModel != null){
+            initReference()
         }
-        mAuth.addAuthStateListener(mAuthStateListener)
     }
 
     private fun getKeyPost() : String{
         return intent.getStringExtra("KEYPOST") ?: throw IllegalArgumentException("Keypost is null") as Throwable
     }
 
-    override fun onStart() {
-        //detail_image_slider.startAutoCycle()
-        mAuth.addAuthStateListener(mAuthStateListener)
-        super.onStart()
-    }
+    private fun fabAction(){
+        if(mUserModel?.uid.equals(mPostModel.uid)){
+            fab.setImageDrawable(resources.getDrawable(R.drawable.ic_action_create_white))
+            fab.setOnClickListener { CafeBar.builder(this@DetailActivity).content("Edit activity")
+                    .theme(CafeBarTheme.LIGHT).contentTypeface("OpenSans-Regular.ttf").show()
+            }
 
-    override fun onStop() {
-        //detail_image_slider.stopAutoCycle()
-        mAuth.removeAuthStateListener(mAuthStateListener)
-        super.onStop()
+        }else{
+            decideLikes(mUserModel?.uid.toString(), likeDatabaseReference)
+            fabClickLike()
+        }
     }
+    private fun decideLikes(uidUser : String, likesReference : DatabaseReference){
+        likeListener = object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError?) {}
+            override fun onDataChange(p0: DataSnapshot?) {
+                if(p0 != null && p0.exists()){
+                    if(p0.hasChild(uidUser)){
+                        fab.setImageDrawable(resources.getDrawable(R.drawable.ic_action_loved))
+                        isLiked = true
+                    }else{
+                        fab.setImageDrawable(resources.getDrawable(R.drawable.ic_action_love_white))
+                        isLiked = false
+                    }
+                }else{
+                    fab.setImageDrawable(resources.getDrawable(R.drawable.ic_action_love_white))
+                    isLiked = false
+                }
+            }
 
+        }
+
+        likesReference.child(getKeyPost()).addListenerForSingleValueEvent(likeListener)
+    }
+    private fun fabClickLike(){
+        fab.setOnClickListener {
+            var isProgress = true
+            likeDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener{
+                override fun onCancelled(p0: DatabaseError?) {}
+                override fun onDataChange(p0: DataSnapshot?) {
+                    if(p0 != null){
+                        if (isProgress) {
+                            if(p0.child(getKeyPost()).hasChild(mUserModel?.uid)){
+                                likeDatabaseReference.child(getKeyPost()).child(mUserModel?.uid).removeValue()
+                                AnotherMethods.counter(mDatabaseRefence.child(getKeyPost()).child("favorite"), false)
+                                isLiked = false
+                                decideLikes(mUserModel?.uid.toString(), likeDatabaseReference)
+                                CafeBar.builder(this@DetailActivity).content("Dihapus dari favorite")
+                                        .theme(CafeBarTheme.LIGHT)
+                                        .contentTypeface("OpenSans-Regular.ttf").show()
+                                isProgress = false
+                            }else{
+                                likeDatabaseReference.child(getKeyPost()).child(mUserModel?.uid).setValue(true)
+                                AnotherMethods.counter(mDatabaseRefence.child(getKeyPost()).child("favorite"), true)
+                                isLiked = true
+                                decideLikes(mUserModel?.uid.toString(), likeDatabaseReference)
+                                CafeBar.builder(this@DetailActivity).content("Favorite")
+                                        .theme(CafeBarTheme.LIGHT)
+                                        .contentTypeface("OpenSans-Regular.ttf").show()
+                                isProgress = false
+                            }
+                        }
+                    }
+                }
+            })
+        }
+    }
     override fun onDestroy() {
-        //Glide.with(this@DetailActivity).pauseRequests();
+        mDatabaseRefence.removeEventListener(fotoListener)
         detail_image_slider.stopAutoCycle()
         super.onDestroy()
     }
-
     private fun initReference(){
+
+        likeDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.LIKES)
+        likeDatabaseReference.keepSynced(true)
         mDatabaseRefence = FirebaseDatabase.getInstance().getReference(Constant.POST)
-        mDatabaseRefence.child(getKeyPost()).addValueEventListener(object : ValueEventListener{
+
+        postListener = object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError?) {}
-            @SuppressLint("SetTextI18n")
             override fun onDataChange(p0: DataSnapshot?) {
                 if(p0 != null){
-                 if(p0.exists()){
-                     mPostModel = p0.getValue(PostModel::class.java)!!
-                     caption_detail.text = mPostModel.caption
-                     judul_post.text = mPostModel.nama_barang
-                     tanggal_post_detail.text = AnotherMethods.getTimeDate(mPostModel.tanggal_post!!)
-                     harga_on_detail.text = "Rp."+mPostModel.harga
-                     diminati.text = " - diminati ${mPostModel.favorite} orang"
-                     if (!mUserModel.uid.equals(mPostModel.uid)){
-                         relative_bottom_detail.visibility = View.VISIBLE
-                     }
-                     val jDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.USERS).child(mPostModel.uid)
-                     jDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener{
-                         override fun onCancelled(p0: DatabaseError?) {}
-                         override fun onDataChange(p0: DataSnapshot?) {
-                             if(p0 != null && p0.exists()){
-                                 val uModel = p0.getValue(UserModel::class.java)
-                                 if(uModel != null){
-                                     display_name_detail.text = uModel.display_name
-                                     Glide.with(applicationContext).load(uModel.url_photo)
-                                             .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC))
-                                             .into(photo_profile_on_detail)
-                                     photo_profile_on_detail.setOnClickListener {
-                                         if(mUserModel.uid.equals(uModel.uid)){
-                                             startActivity(Intent(this@DetailActivity, ProfileActivity::class.java))
-                                         }else{
-                                             Toast.makeText(this@DetailActivity, "Other profile Activity", Toast.LENGTH_SHORT).show()
-                                         }
-                                     }
-                                 }
-                             }
-                         }
+                    if(p0.exists()){
+                            mPostModel = p0.getValue(PostModel::class.java)!!
+                            caption_detail.text = mPostModel.caption
+                            judul_post.text = mPostModel.nama_barang
+                            tanggal_post_detail.text = AnotherMethods.getTimeDate(mPostModel.tanggal_post)
+                            harga_on_detail.text = "Rp."+mPostModel.harga
+                            diminati.text = "Diminati ${mPostModel.favorite} orang"
+                            if (!mUserModel?.uid.equals(mPostModel.uid)){
+                                relative_bottom_detail.visibility = View.VISIBLE
+                            }
+                            val jDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.USERS).child(mPostModel.uid)
+                            jDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener{
+                                override fun onCancelled(p0: DatabaseError?) {}
+                                override fun onDataChange(p0: DataSnapshot?) {
+                                    if(p0 != null && p0.exists()){
+                                        val uModel = p0.getValue(UserModel::class.java)
+                                        if(uModel != null){
+                                            display_name_detail.text = uModel.display_name
+                                            Glide.with(applicationContext).load(uModel.url_photo)
+                                                    .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC))
+                                                    .into(photo_profile_on_detail)
+                                            photo_profile_on_detail.setOnClickListener {
+                                                if(mUserModel?.uid.equals(uModel.uid)){
+                                                    startActivity(Intent(this@DetailActivity, ProfileActivity::class.java))
+                                                }else{
+                                                    val i = Intent(this@DetailActivity, PersonsActivity::class.java)
+                                                    i.putExtra("UIDUSER", uModel.uid)
+                                                    startActivity(i)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
 
-                     })
-                 }
+                            })
+                            fabAction()
+                        }
                 }
             }
-        })
-        mDatabaseRefence.child(getKeyPost()).child("foto").addValueEventListener(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError?) {}
+
+        }
+
+
+        mDatabaseRefence.child(getKeyPost()).addListenerForSingleValueEvent(postListener)
+
+
+        fotoListener = object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError?) {
+                println("Cannot fetch image from server")
+            }
+
             override fun onDataChange(p0: DataSnapshot?) {
                 if(p0 != null && p0.exists()){
                     listOfImages.clear()
@@ -190,9 +251,12 @@ class DetailActivity : AppCompatActivity(), BaseSliderView.OnSliderClickListener
                     setImageSlider()
                 }
             }
-        })
-    }
 
+        }
+
+        mDatabaseRefence.child(getKeyPost()).child("foto").addListenerForSingleValueEvent(fotoListener)
+
+    }
     private fun setImageSlider(){
         var i = 0
         while(i < listOfImages.size){
@@ -210,20 +274,18 @@ class DetailActivity : AppCompatActivity(), BaseSliderView.OnSliderClickListener
         detail_image_slider.addOnPageChangeListener(this@DetailActivity)
         detail_image_slider.stopAutoCycle()
     }
-
     override fun onSliderClick(slider: BaseSliderView?) {
         if (slider != null) {
-            Toast.makeText(this@DetailActivity, slider.bundle.get("photoUrl").toString(), Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this@DetailActivity, slider.bundle.get("photoUrl").toString(), Toast.LENGTH_SHORT).show()
         }
     }
     override fun onPageScrollStateChanged(state: Int) {
     }
-
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
     }
-
     override fun onPageSelected(position: Int) {
     }
+
 
 
 }

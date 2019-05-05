@@ -137,4 +137,15 @@
     <string name="tab_text_2">Tab 2</string>
     <string name="tab_text_3">Tab 3</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="ketik_pesan">Ketik pesan</string>
+    <string name="title_activity_other_profile">Person</string>
+    <string name="title_activity_person">Person</string>
+    <string name="title_activity_persons">Person</string>
+    <string name="title_activity_transaction">Transaksi saya</string>
+    <string name="transaksi_ini_sudah_ada">Barang yang anda maksud sudah dipesan oleh orang lain</string>
+    <string name="kembali">Kembali</string>
+    <string name="tunggu_transaksi">Tunggu untuk penjual mengirimkan komoditas ke tempat anda. Anda juga dapat melihat lokasi terbaru dari pengiriman</string>
+    <string name="tunggu_transaksi_penjual">Segera kirimkan komoditas ke pembeli. Pilih driver lalu klik ok dan pastikan driver menerima orderan anda</string>
+    <string name="title_activity_choose_driver">Pilih jasa ekspedisi</string>
+    <string name="title_activity_tracking">Tracking</string>
 </resources>

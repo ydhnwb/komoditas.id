@@ -41,29 +41,19 @@
 
                 <LinearLayout
                     android:padding="8dp"
-                    android:weightSum="10"
                     android:layout_marginTop="32dp"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
                         android:id="@+id/beli_harga"
-                        android:layout_weight="7"
                         android:textSize="20sp"
                         android:textColor="@color/materialBlack"
                         android:textStyle="bold"
                         android:text=""
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                    <Spinner
-                        android:id="@+id/beli_jumlaj"
-                        android:layout_width="0dp"
-                        android:layout_height="38dp"
-                        android:layout_weight="3"
-                        android:entries="@array/spinner_beli">
-
-                    </Spinner>
                 </LinearLayout>
             </LinearLayout>
 
@@ -83,7 +73,7 @@
                 <TextView
                     android:textStyle="bold"
                     android:textSize="14sp"
-                    android:text="METODE PEMBAYARAN : "
+                    android:text="METODE PEMBAYARAN"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 <RadioGroup
@@ -91,21 +81,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <RadioButton
-                        android:text="Bank Jateng"
+                        android:text="Bank Lorem"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                     <RadioButton
-                        android:text="Bank BRI"
+                        android:text="Bank Ipsum"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
                 </RadioGroup>
 
                 <Button
+                    android:id="@+id/beli"
                     android:layout_gravity="end"
                     android:textColor="@color/colorPrimary"
                     style="@style/Widget.AppCompat.Button.Colored"
-                    android:text="LANJUTKAN"
+                    android:text="Beli"
+                    android:textAllCaps="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 

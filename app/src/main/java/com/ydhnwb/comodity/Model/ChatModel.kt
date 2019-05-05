@@ -1,6 +1,5 @@
 package com.ydhnwb.comodity.Model
 
-import com.stfalcon.chatkit.commons.models.IMessage
 
 /**
  * Created by Prieyuda Akadita S on 29/05/2018.

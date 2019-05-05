@@ -1,42 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
+    android:layout_height="wrap_content"
     android:background="@color/colorWhite"
-    android:layout_alignParentBottom="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
 
     <RelativeLayout
         android:background="@color/colorWhite"
-        android:gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:background="#bdbdbd"
             android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="1dp">
-
         </RelativeLayout>
 
 
         <LinearLayout
-            android:paddingStart="8dp"
-            android:weightSum="10"
+            android:weightSum="11"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
+
+
+            <RelativeLayout
+                android:id="@+id/attach_chat"
+                android:clickable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_weight="1.5"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:padding="6dp"
+                    android:src="@drawable/ic_action_attach"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+            </RelativeLayout>
 
             <com.rengwuxian.materialedittext.MaterialEditText
-
+                android:padding="6dp"
                 android:id="@+id/text_chat"
                 android:layout_width="0dp"
                 android:layout_weight="8"
                 android:layout_gravity="center"
                 app:met_hideUnderline="true"
-                android:hint="Ketik pesan..."
-                android:maxLines="5"
+                android:hint="@string/ketik_pesan"
+                android:maxLines="6"
                 android:layout_height="wrap_content" />
 
             <RelativeLayout
@@ -44,15 +59,14 @@
                 android:id="@+id/send_chat"
                 android:background="?android:attr/selectableItemBackground"
                 android:gravity="center"
-                android:layout_weight="2"
+                android:layout_weight="1.5"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
-
                 <ImageView
+                    android:padding="6dp"
                     android:src="@drawable/ic_action_send"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
-
             </RelativeLayout>
 
         </LinearLayout>

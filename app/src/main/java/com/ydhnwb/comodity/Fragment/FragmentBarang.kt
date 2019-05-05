@@ -2,6 +2,7 @@ package com.ydhnwb.comodity.Fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.GridLayoutManager
@@ -17,6 +18,7 @@ import com.danimahardhika.cafebar.CafeBarTheme
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.ydhnwb.comodity.DetailActivity
 import com.ydhnwb.comodity.Interfaces.MyClickListener
@@ -40,16 +42,18 @@ class FragmentBarang : Fragment() {
     private lateinit var likeDatabaseReference : DatabaseReference
     private lateinit var mAuth : FirebaseAuth
     private lateinit var mAuthStateListener : FirebaseAuth.AuthStateListener
-    private lateinit var u : UserModel
+    private var u : FirebaseUser? = null
     private lateinit var userDatabaseReference : DatabaseReference
     private lateinit var searchQuery : String
     private var activityCode = 0
     private lateinit var categoryPost : String
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_barang, container, false)
         val mLayoutManager = GridLayoutManager(activity, 2)
         view.recyclerViewBarang.layoutManager = mLayoutManager
+        view.shimmer_search_container.startShimmer()
         val animator = view.recyclerViewBarang.itemAnimator
         if (animator is SimpleItemAnimator) {
             animator.supportsChangeAnimations = false
@@ -92,7 +96,7 @@ class FragmentBarang : Fragment() {
                 val uid = model.uid
                 holder.nama_barang.text = model.nama_barang
                 holder.harga.text = "Rp."+model.harga
-                userDatabaseReference.child(uid).addValueEventListener(object : ValueEventListener{
+                userDatabaseReference.child(uid).addListenerForSingleValueEvent(object : ValueEventListener{
                     override fun onCancelled(p0: DatabaseError?) {}
                     override fun onDataChange(p0: DataSnapshot?) {
                         if(p0 != null && p0.exists()){
@@ -116,7 +120,7 @@ class FragmentBarang : Fragment() {
 
                 val gDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.POST).child(getRef(position).key)
                 gDatabaseReference.keepSynced(true)
-                gDatabaseReference.child("foto").addValueEventListener(object : ValueEventListener{
+                gDatabaseReference.child("foto").addListenerForSingleValueEvent(object : ValueEventListener{
                     override fun onCancelled(p0: DatabaseError?) { println("Cannot fetch image from the server...") }
                     override fun onDataChange(p0: DataSnapshot?) {
                         if(p0 != null && p0.exists()){
@@ -153,12 +157,12 @@ class FragmentBarang : Fragment() {
                 holder.setOnLongItemClickListener(object : MyClickListener{
                     override fun onClick(v: View, position: Int, isLongClick: Boolean) {
                         val tDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.POST).child(getRef(position).key)
-                        tDatabaseReference.addValueEventListener(object : ValueEventListener{
+                        tDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener{
                             override fun onCancelled(p0: DatabaseError?) {}
                             override fun onDataChange(p0: DataSnapshot?) {
                                 if(p0 != null && p0.exists()){
                                     val postModel = p0.getValue(PostModel::class.java)
-                                    if(postModel != null && u.uid.equals(postModel.uid)){
+                                    if(postModel != null && u?.uid.equals(postModel.uid)){
                                         val opt = AlertDialog.Builder(activity!!)
                                         opt.setMessage("Lorem ipsum dolor sir amet consectuer").setCancelable(false)
                                                 .setPositiveButton("LOREM") { dialog, _ -> dialog?.cancel() }
@@ -176,13 +180,13 @@ class FragmentBarang : Fragment() {
                 holder.like_button.setOnLikeListener(object : OnLikeListener {
                     override fun liked(p0: LikeButton?) {
                         var isProgress = true
-                        likeDatabaseReference.addValueEventListener(object : ValueEventListener{
+                        likeDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener{
                             override fun onCancelled(p0: DatabaseError?) {}
                             override fun onDataChange(p0: DataSnapshot?) {
                                 if(p0 != null){
                                     if (isProgress) {
-                                        if(!p0.child(getRef(position).key).hasChild(u.uid)){
-                                            likeDatabaseReference.child(getRef(position).key).child(u.uid).setValue(true)
+                                        if(!p0.child(getRef(position).key).hasChild(u?.uid)){
+                                            likeDatabaseReference.child(getRef(position).key).child(u?.uid).setValue(true)
                                             AnotherMethods.counter(gDatabaseReference.child("favorite"), true)
                                             isProgress = false
                                             CafeBar.builder(activity!!).content("Favorit")
@@ -197,13 +201,13 @@ class FragmentBarang : Fragment() {
 
                     override fun unLiked(p0: LikeButton?) {
                         var isProgress = true
-                        likeDatabaseReference.addValueEventListener(object : ValueEventListener{
+                        likeDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener{
                             override fun onCancelled(p0: DatabaseError?) {}
                             override fun onDataChange(p0: DataSnapshot?) {
                                 if(p0 != null){
                                     if (isProgress) {
-                                        if(p0.child(getRef(position).key).hasChild(u.uid)){
-                                            likeDatabaseReference.child(getRef(position).key).child(u.uid).removeValue()
+                                        if(p0.child(getRef(position).key).hasChild(u?.uid)){
+                                            likeDatabaseReference.child(getRef(position).key).child(u?.uid).removeValue()
                                             AnotherMethods.counter(gDatabaseReference.child("favorite"), false)
                                             isProgress = false
                                             CafeBar.builder(activity!!).content("Dihapus dari favorit")
@@ -217,13 +221,24 @@ class FragmentBarang : Fragment() {
                         })
                     }
                 })
-                //holder.like_button.isLiked = false
             }
         }
-        view.recyclerViewBarang.adapter = firebaseRecyclerAdapter
-        firebaseRecyclerAdapter.startListening()
+
+       val waitHandler = Handler()
+        val callback = Runnable {
+            fetchData(view)
+        }
+        waitHandler.postDelayed(callback, 2000)
         return view
     }
+
+    private fun fetchData(mView : View){
+        mView.recyclerViewBarang.adapter = firebaseRecyclerAdapter
+        firebaseRecyclerAdapter.startListening()
+        mView.shimmer_search_container.stopShimmer()
+        mView.shimmer_search_container.visibility = View.GONE
+    }
+
 
     private fun initFire(codeActivity : Int){
         mFirebaseDatabase = FirebaseDatabase.getInstance()
@@ -241,16 +256,18 @@ class FragmentBarang : Fragment() {
 
     private fun initAuth(){
         mAuth = FirebaseAuth.getInstance()
-        mAuthStateListener = FirebaseAuth.AuthStateListener {
+        u = mAuth.currentUser
+
+        /*mAuthStateListener = FirebaseAuth.AuthStateListener {
             val c = it.currentUser
             if(c != null){
                 u = UserModel(c.uid,c.displayName.toString(),c.displayName.toString().toLowerCase(),
                         c.email.toString(), c.photoUrl.toString())
             }
         }
-
-        mAuth.addAuthStateListener(mAuthStateListener)
+        mAuth.addAuthStateListener(mAuthStateListener)*/
     }
+
 
 
 }

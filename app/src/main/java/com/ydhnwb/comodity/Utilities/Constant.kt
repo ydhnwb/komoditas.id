@@ -9,9 +9,11 @@ class Constant {
         const val USERS = "USERS"
         const val STATUS = "WAITING"
         const val POST = "POST"
+        const val DRIVERS = "DRIVER"
         const val CHAT = "CHAT"
         const val LIKES = "LIKES"
-
+        const val TRANSACTION = "TRANSACTION"
+        const val USER_TRANSACTION = "USER_TRANSACTION"
 
         const val INDIVIDUAL_POST = "INDIVIDUAL_POST"
         const val CATEGORIZED_POST = "CATEGORIZED_POST"
@@ -36,6 +38,8 @@ class Constant {
         const val TERNAK = 4
         const val TERNAK_REF ="TERNAK"
 
+
+        const val IMAGES_CHAT = "IMAGES_CHAT"
 
     }
 }

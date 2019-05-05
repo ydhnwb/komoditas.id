@@ -8,16 +8,15 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.ydhnwb.comodity.Interfaces.MyClickListener
-import com.ydhnwb.comodity.Model.ChatModel
 import com.ydhnwb.comodity.Model.ListOfChatModel
 import com.ydhnwb.comodity.Model.UserModel
 import com.ydhnwb.comodity.Utilities.Constant
@@ -31,8 +30,8 @@ import com.ydhnwb.comodity.FirebaseMethods.AnotherMethods
 class ListChatActivity : AppCompatActivity() {
 
     private lateinit var mAuth: FirebaseAuth
-    private lateinit var mAuthStateListener: FirebaseAuth.AuthStateListener
-    private lateinit var me: UserModel
+    //private lateinit var mAuthStateListener: FirebaseAuth.AuthStateListener
+    private var me: FirebaseUser? = null
     private lateinit var fireAdapter: FirebaseRecyclerAdapter<ListOfChatModel, ListOfChatViewHolder>
     private var mDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.CHAT)
 
@@ -42,9 +41,9 @@ class ListChatActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         initComp()
         toolbar.setNavigationIcon(R.drawable.ic_action_back)
-        toolbar.setNavigationOnClickListener({
+        toolbar.setNavigationOnClickListener {
             finish()
-        })
+        }
         initAuth()
     }
 
@@ -60,7 +59,11 @@ class ListChatActivity : AppCompatActivity() {
 
     private fun initAuth() {
         mAuth = FirebaseAuth.getInstance()
-        mAuthStateListener = FirebaseAuth.AuthStateListener {
+        me = mAuth.currentUser
+        if(me != null){
+            fetchData()
+        }
+        /*mAuthStateListener = FirebaseAuth.AuthStateListener {
             val o = it.currentUser
             if (o == null) {
                 finish()
@@ -70,11 +73,12 @@ class ListChatActivity : AppCompatActivity() {
             }
         }
         mAuth.addAuthStateListener(mAuthStateListener)
+        */
     }
 
     private fun fetchData() {
         val fo = FirebaseRecyclerOptions.Builder<ListOfChatModel>()
-                .setQuery(mDatabaseReference.child(me.uid), ListOfChatModel::class.java).build()
+                .setQuery(mDatabaseReference.child(me?.uid).orderByChild("date"), ListOfChatModel::class.java).build()
 
         fireAdapter = object : FirebaseRecyclerAdapter<ListOfChatModel, ListOfChatViewHolder>(fo) {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListOfChatViewHolder {
@@ -87,7 +91,7 @@ class ListChatActivity : AppCompatActivity() {
             override fun onBindViewHolder(holder: ListOfChatViewHolder, position: Int, model: ListOfChatModel) {
                 val uid : String = model.uid
                 val oDatabaseReference = FirebaseDatabase.getInstance().getReference(Constant.USERS).child(uid)
-                oDatabaseReference.addValueEventListener(object : ValueEventListener{
+                oDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener{
                     override fun onCancelled(p0: DatabaseError?) {}
                     override fun onDataChange(p0: DataSnapshot?) {
                         if((p0 != null) && p0.exists()){
@@ -103,21 +107,21 @@ class ListChatActivity : AppCompatActivity() {
                 })
 
                 val cDatabaseReference = getRef(position).child("chat")
-                        cDatabaseReference.orderByKey().limitToLast(1).addValueEventListener(object : ValueEventListener{
+                        cDatabaseReference.orderByKey().limitToLast(1).addListenerForSingleValueEvent(object : ValueEventListener{
                             override fun onCancelled(p0: DatabaseError?) {}
                             override fun onDataChange(p0: DataSnapshot?) {
                                 if (p0 != null) {
                                     var key = ""
-                                    for (child in p0.getChildren()) {
+                                    for (child in p0.children) {
                                         key = child.key
                                     }
-                                    cDatabaseReference.child(key).addValueEventListener(object : ValueEventListener{
+                                    cDatabaseReference.child(key).addListenerForSingleValueEvent(object : ValueEventListener{
                                         override fun onCancelled(p0s: DatabaseError?) {}
                                         override fun onDataChange(p0s: DataSnapshot?) {
                                             if(p0s != null && p0s.exists() ){
-                                                val lastmessage = p0s.child("message").getValue().toString()
+                                                val lastmessage = p0s.child("message").value.toString()
                                                     holder.lastMessage.text = lastmessage
-                                                val lastdate : Long = p0s.child("tanggal_post").getValue() as Long
+                                                val lastdate : Long = p0s.child("tanggal_post").value as Long
                                                 holder.lastDate.text = AnotherMethods.getTimeDate(lastdate)
                                             }
                                         }
@@ -144,4 +148,5 @@ class ListChatActivity : AppCompatActivity() {
         fireAdapter.startListening()
 
     }
+
 }

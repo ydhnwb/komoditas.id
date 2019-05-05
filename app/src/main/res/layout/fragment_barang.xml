@@ -2,7 +2,16 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/shimmer_search_container">
+        <include layout="@layout/shimmer_search_placeholder"/>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewBarang"

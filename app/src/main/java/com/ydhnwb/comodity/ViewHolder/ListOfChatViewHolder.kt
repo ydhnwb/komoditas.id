@@ -47,7 +47,4 @@ class ListOfChatViewHolder(itemView : View, context : Context): RecyclerView.Vie
     fun setOnItemClickListener(shortClick : MyClickListener){
         this.onShortClickListener = shortClick
     }
-
-
-
 }
